@@ -11,7 +11,7 @@ class TamuRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,8 @@ class TamuRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'undangan_id' => 'required|exists:undangans,id',
+            'nama_tamu' => 'required|string|max:255',
         ];
     }
 }
