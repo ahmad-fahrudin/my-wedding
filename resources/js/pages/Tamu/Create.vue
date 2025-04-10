@@ -25,40 +25,40 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 const form = useForm({
-  undangan_id: '',
+//   undangan_id: '',
   nama_tamu: '',
 });
 
 // Dropdown related variables
 const isDropdownOpen = ref(false);
-const searchTerm = ref('');
+// const searchTerm = ref('');
 const dropdownRef = ref(null);
 const selectedUndangan = ref(null);
 
 // Filter undangan based on search term
-const filteredUndangan = computed(() => {
-  if (!searchTerm.value) {
-    return props.undangan.data;
-  }
+// const filteredUndangan = computed(() => {
+//   if (!searchTerm.value) {
+//     return props.undangan.data;
+//   }
 
-  const searchLower = searchTerm.value.toLowerCase();
-  return props.undangan.data.filter(item => {
-    const fullName = `${item.nama_memelai_1} & ${item.nama_memelai_2}`.toLowerCase();
-    return fullName.includes(searchLower);
-  });
-});
+//   const searchLower = searchTerm.value.toLowerCase();
+//   return props.undangan.data.filter(item => {
+//     const fullName = `${item.nama_memelai_1} & ${item.nama_memelai_2}`.toLowerCase();
+//     return fullName.includes(searchLower);
+//   });
+// });
 
-// Toggle dropdown visibility
-function toggleDropdown() {
-  isDropdownOpen.value = !isDropdownOpen.value;
-}
+// // Toggle dropdown visibility
+// function toggleDropdown() {
+//   isDropdownOpen.value = !isDropdownOpen.value;
+// }
 
-// Handle selection
-function selectUndangan(undangan) {
-  form.undangan_id = undangan.id;
-  selectedUndangan.value = undangan;
-  isDropdownOpen.value = false;
-}
+// // Handle selection
+// function selectUndangan(undangan) {
+//   form.undangan_id = undangan.id;
+//   selectedUndangan.value = undangan;
+//   isDropdownOpen.value = false;
+// }
 
 // Handle click outside
 function handleClickOutside(event) {
@@ -119,7 +119,7 @@ function submit() {
             <Card>
                 <form @submit.prevent="submit">
                     <CardContent class="space-y-4">
-                        <div class="space-y-2">
+                        <!-- <div class="space-y-2">
                             <Label for="undangan_id">Undangan</Label>
                             <div class="relative" ref="dropdownRef">
                                 <button
@@ -164,7 +164,7 @@ function submit() {
                                 <input type="hidden" v-model="form.undangan_id" />
                                 <p v-if="form.errors.undangan_id" class="mt-1 text-sm text-red-500">{{ form.errors.undangan_id }}</p>
                             </div>
-                        </div>
+                        </div> -->
 
                         <div class="space-y-2">
                             <Label for="nama_tamu">Nama Tamu</Label>

@@ -11,7 +11,7 @@ class Galeri extends Model
     use HasFactory;
 
     protected $fillable = [
-        'undangan_id',
+        // 'undangan_id',
         'image',
     ];
 

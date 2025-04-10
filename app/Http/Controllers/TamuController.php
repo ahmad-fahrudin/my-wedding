@@ -106,16 +106,4 @@ class TamuController extends Controller
             return redirect()->back()->with('error', 'Gagal menghapus tamu');
         }
     }
-
-    public function getByUndangan($undanganId)
-    {
-        try {
-            $tamu = $this->tamuService->getTamuByUndangan($undanganId);
-
-            return response()->json($tamu);
-        } catch (Exception $e) {
-            Log::error('Error fetching tamu by undangan: ' . $e->getMessage());
-            return response()->json(['error' => 'Gagal mengambil data tamu'], 500);
-        }
-    }
 }

@@ -42,10 +42,6 @@ class TamuService
 
     public function updateTamu(int $id, array $data): bool
     {
-        if (isset($data['undangan_id'])) {
-            $this->undanganRepository->findById($data['undangan_id']);
-        }
-
         return $this->tamuRepository->update($id, $data);
     }
 
@@ -54,11 +50,10 @@ class TamuService
         return $this->tamuRepository->delete($id);
     }
 
-    public function getTamuByUndangan(int $undanganId): array
-    {
-        // Validate undangan exists
-        $this->undanganRepository->findById($undanganId);
+    // public function getTamuByUndangan(int $undanganId): array
+    // {
+    //     $this->undanganRepository->findById($undanganId);
 
-        return $this->tamuRepository->getByUndanganId($undanganId);
-    }
+    //     return $this->tamuRepository->getByUndanganId($undanganId);
+    // }
 }

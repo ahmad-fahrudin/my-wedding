@@ -13,17 +13,17 @@ class TamuRepository
             ->when(isset($filters['search']), function ($query) use ($filters) {
                 $query->where('nama_tamu', 'like', "%{$filters['search']}%");
             })
-            ->when(isset($filters['undangan_id']), function ($query) use ($filters) {
-                $query->where('undangan_id', $filters['undangan_id']);
-            })
-            ->with('undangan:id,nama_memelai_1,nama_memelai_2')
+            // ->when(isset($filters['undangan_id']), function ($query) use ($filters) {
+            //     $query->where('undangan_id', $filters['undangan_id']);
+            // })
+            // ->with('undangan:id,nama_memelai_1,nama_memelai_2')
             ->orderBy('id', 'desc')
             ->paginate($perPage);
     }
 
     public function findById(int $id): Tamu
     {
-        return Tamu::with('undangan:id,nama_memelai_1,nama_memelai_2')->findOrFail($id);
+        return Tamu::findOrFail($id);
     }
 
     public function create(array $data): Tamu
@@ -43,10 +43,10 @@ class TamuRepository
         return $tamu->delete();
     }
 
-    public function getByUndanganId(int $undanganId): array
-    {
-        return Tamu::where('undangan_id', $undanganId)
-            ->get()
-            ->toArray();
-    }
+    // public function getByUndanganId(int $undanganId): array
+    // {
+    //     return Tamu::where('undangan_id', $undanganId)
+    //         ->get()
+    //         ->toArray();
+    // }
 }

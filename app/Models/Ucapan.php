@@ -11,7 +11,7 @@ class Ucapan extends Model
     use HasFactory;
 
     protected $fillable = [
-        'undangan_id',
+        // 'undangan_id',
         'nama',
         'ucapan',
     ];
