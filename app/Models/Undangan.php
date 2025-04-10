@@ -20,17 +20,17 @@ class Undangan extends Model
         'rekening_gift',
     ];
 
-    public function tamus(): HasMany
+    public function tamu(): HasMany
     {
         return $this->hasMany(Tamu::class);
     }
 
-    public function galeris(): HasMany
+    public function galeri(): HasMany
     {
         return $this->hasMany(Galeri::class);
     }
 
-    public function ucapans(): HasMany
+    public function ucapan(): HasMany
     {
         return $this->hasMany(Ucapan::class);
     }
