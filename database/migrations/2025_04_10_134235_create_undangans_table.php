@@ -13,6 +13,13 @@ return new class extends Migration
     {
         Schema::create('undangans', function (Blueprint $table) {
             $table->id();
+            $table->string('nama_memelai_1');
+            $table->string('nama_memelai_2');
+            $table->date('tanggal_acara');
+            $table->time('waktu_acara');
+            $table->string('tempat');
+            $table->string('url_maps')->nullable();
+            $table->string('rekening_gift')->nullable();
             $table->timestamps();
         });
     }

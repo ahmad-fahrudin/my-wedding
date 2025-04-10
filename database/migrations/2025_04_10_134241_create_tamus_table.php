@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('tamus', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('undangan_id')->constrained()->onDelete('cascade');
+            $table->string('nama_tamu');
+            $table->enum('status', ['Diundang', 'Hadir', 'Tidak Hadir'])->default('Diundang');
             $table->timestamps();
         });
     }
