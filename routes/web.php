@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\TamuController;
-use App\Http\Controllers\UndanganController;
-use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TamuController;
+use App\Http\Controllers\GaleriController;
+use App\Http\Controllers\UndanganController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome');
@@ -28,6 +29,14 @@ Route::post('/tamus', [TamuController::class, 'store'])->name('tamus.store');
 Route::get('/tamus/{id}/edit', [TamuController::class, 'edit'])->name('tamus.edit');
 Route::put('/tamus/{id}', [TamuController::class, 'update'])->name('tamus.update');
 Route::delete('/tamus/{id}', [TamuController::class, 'destroy'])->name('tamus.destroy');
+
+// Galeri Routes
+Route::get('/galeris', [GaleriController::class, 'index'])->name('galeris.index');
+Route::get('/galeris/create', [GaleriController::class, 'create'])->name('galeris.create');
+Route::post('/galeris', [GaleriController::class, 'store'])->name('galeris.store');
+Route::get('/galeris/{id}/edit', [GaleriController::class, 'edit'])->name('galeris.edit');
+Route::put('/galeris/{id}', [GaleriController::class, 'update'])->name('galeris.update');
+Route::delete('/galeris/{id}', [GaleriController::class, 'destroy'])->name('galeris.destroy');
 
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';

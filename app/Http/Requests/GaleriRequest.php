@@ -11,7 +11,7 @@ class GaleriRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,8 +21,16 @@ class GaleriRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            //
+        $rules = [
+            'undangan_id' => ['required', 'integer', 'exists:undangans,id'],
         ];
+
+        if ($this->isMethod('post')) {
+            $rules['image'] = ['required', 'image', 'max:2048'];
+        } else {
+            $rules['image'] = ['nullable', 'image', 'max:2048'];
+        }
+
+        return $rules;
     }
 }

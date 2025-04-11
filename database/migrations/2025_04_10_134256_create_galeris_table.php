@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('galeris', function (Blueprint $table) {
             $table->id();
-            // $table->foreignId('undangan_id')->constrained()->onDelete('cascade');
-            $table->string('image');
+            $table->foreignId('undangan_id')->constrained()->onDelete('cascade');
+            $table->longText('image');
             $table->timestamps();
         });
     }

@@ -18,6 +18,11 @@ class UndanganRepository
             ->paginate($perPage);
     }
 
+    public function getAll()
+    {
+        return Undangan::all();
+    }
+
     public function findById(int $id): Undangan
     {
         return Undangan::findOrFail($id);
