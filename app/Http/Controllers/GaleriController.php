@@ -21,9 +21,6 @@ class GaleriController extends Controller
         $this->undanganService = $undanganService;
     }
 
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
         try {

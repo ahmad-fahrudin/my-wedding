@@ -29,6 +29,12 @@ const mainNavItems: NavItem[] = [
         href: '/galeris',
         icon: LayoutGrid,
     },
+    {
+        title: 'Lihat Hasil',
+        href: '/contents',
+        icon: Folder,
+    },
+
 ];
 
 const footerNavItems: NavItem[] = [
