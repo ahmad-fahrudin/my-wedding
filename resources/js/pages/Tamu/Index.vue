@@ -104,8 +104,7 @@ function deleteTamu(id) {
                             <tr>
                                 <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider w-12">No.</th>
                                 <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Nama Tamu</th>
-                                <!-- <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Undangan</th> -->
-                                <!-- <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider w-24">Status</th> -->
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Undangan</th>
                                 <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider w-24">Actions</th>
                             </tr>
                         </thead>
@@ -113,21 +112,9 @@ function deleteTamu(id) {
                             <tr v-for="(item, index) in tamu.data" :key="item.id" class="hover:bg-gray-50 dark:hover:bg-gray-800">
                                 <td class="px-4 py-2 whitespace-nowrap text-sm">{{ tamu.from + index }}</td>
                                 <td class="px-4 py-2 whitespace-nowrap text-sm">{{ item.nama_tamu }}</td>
-                                <!-- <td class="px-4 py-2 whitespace-nowrap text-sm">
-                                  {{ item.undangan ? `${item.undangan.nama_memelai_1} & ${item.undangan.nama_memelai_2}` : '-' }}
-                                </td> -->
-                                <!-- <td class="px-4 py-2 whitespace-nowrap">
-                                    <span
-                                        :class="[
-                                            'px-1.5 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-full',
-                                            item.status === 1
-                                                ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
-                                                : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300',
-                                        ]"
-                                    >
-                                        {{ item.status === 1 ? 'Hadir' : 'Tidak Hadir' }}
-                                    </span>
-                                </td> -->
+                                <td class="px-4 py-2 whitespace-nowrap text-sm">
+                                  {{ item.undangan ? `${item.undangan.nama_mempelai_1} & ${item.undangan.nama_mempelai_2}` : '-' }}
+                                </td>
                                 <td class="px-4 py-2 whitespace-nowrap">
                                     <div class="flex space-x-1">
                                         <Link :href="route('tamus.edit', item.id)">

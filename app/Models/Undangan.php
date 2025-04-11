@@ -11,8 +11,8 @@ class Undangan extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nama_memelai_1',
-        'nama_memelai_2',
+        'nama_mempelai_1',
+        'nama_mempelai_2',
         'tanggal_acara',
         'waktu_acara',
         'tempat',

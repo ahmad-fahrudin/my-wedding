@@ -11,8 +11,8 @@ class UndanganRepository
     {
         return Undangan::query()
             ->when(isset($filters['search']), function ($query) use ($filters) {
-                $query->where('nama_memelai_1', 'like', "%{$filters['search']}%")
-                    ->orWhere('nama_memelai_2', 'like', "%{$filters['search']}%");
+                $query->where('nama_mempelai_1', 'like', "%{$filters['search']}%")
+                    ->orWhere('nama_mempelai_2', 'like', "%{$filters['search']}%");
             })
             ->orderBy('id', 'desc')
             ->paginate($perPage);

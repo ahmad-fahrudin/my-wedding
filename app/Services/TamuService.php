@@ -50,10 +50,10 @@ class TamuService
         return $this->tamuRepository->delete($id);
     }
 
-    // public function getTamuByUndangan(int $undanganId): array
-    // {
-    //     $this->undanganRepository->findById($undanganId);
+    public function getTamuByUndangan(int $undanganId): array
+    {
+        $this->undanganRepository->findById($undanganId);
 
-    //     return $this->tamuRepository->getByUndanganId($undanganId);
-    // }
+        return $this->tamuRepository->getByUndanganId($undanganId);
+    }
 }

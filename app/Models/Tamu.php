@@ -11,7 +11,7 @@ class Tamu extends Model
     use HasFactory;
 
     protected $fillable = [
-        // 'undangan_id',
+        'undangan_id',
         'nama_tamu',
         'status',
     ];

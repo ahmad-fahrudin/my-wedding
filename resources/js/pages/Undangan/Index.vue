@@ -115,7 +115,7 @@ function deleteUndangan(id) {
                             <tr v-for="(item, index) in undangan.data" :key="item.id" class="hover:bg-gray-50 dark:hover:bg-gray-800">
                                 <td class="px-4 py-2 whitespace-nowrap text-sm">{{ undangan.from + index }}</td>
                                 <td class="px-4 py-2 whitespace-nowrap text-sm">
-                                  {{ item.nama_memelai_1 }} & {{ item.nama_memelai_2 }}
+                                  {{ item.nama_mempelai_1 }} & {{ item.nama_mempelai_2 }}
                                 </td>
                                 <td class="px-4 py-2 whitespace-nowrap text-sm">
                                   {{ new Date(item.tanggal_acara).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) }}

@@ -82,7 +82,7 @@ const filteredUndangan = computed(() => {
 
   const searchLower = searchTerm.value.toLowerCase();
   return props.undangans?.data.filter(item => {
-    const fullName = `${item.nama_memelai_1} & ${item.nama_memelai_2}`.toLowerCase();
+    const fullName = `${item.nama_mempelai_1} & ${item.nama_mempelai_2}`.toLowerCase();
     return fullName.includes(searchLower);
   });
 });
@@ -166,7 +166,7 @@ function submit() {
                                     @click="toggleDropdown"
                                     class="w-full flex items-center justify-between pl-4 pr-2 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-900 text-sm"
                                 >
-                                    <span v-if="selectedUndangan">{{ selectedUndangan.nama_memelai_1 }} & {{ selectedUndangan.nama_memelai_2 }}</span>
+                                    <span v-if="selectedUndangan">{{ selectedUndangan.nama_mempelai_1 }} & {{ selectedUndangan.nama_mempelai_2 }}</span>
                                     <span v-else class="text-gray-500">Pilih Undangan</span>
                                     <svg class="h-4 w-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -193,7 +193,7 @@ function submit() {
                                             class="w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-800"
                                             :class="{'bg-blue-50 dark:bg-blue-900': form.undangan_id === item.id}"
                                         >
-                                            {{ item.nama_memelai_1 }} & {{ item.nama_memelai_2 }}
+                                            {{ item.nama_mempelai_1 }} & {{ item.nama_mempelai_2 }}
                                         </button>
                                     </div>
                                     <div v-else class="px-4 py-2 text-sm text-gray-500 dark:text-gray-400">

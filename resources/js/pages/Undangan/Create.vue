@@ -22,8 +22,8 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 const form = useForm({
-  nama_memelai_1: '',
-  nama_memelai_2: '',
+  nama_mempelai_1: '',
+  nama_mempelai_2: '',
   tanggal_acara: '',
   waktu_acara: '',
   tempat: '',
@@ -206,31 +206,31 @@ function updateLocationUrl(lat: number, lng: number) {
                 </h3>
 
                 <div class="space-y-2">
-                  <Label for="nama_memelai_1" class="font-medium">Nama Pengantin Pria</Label>
+                  <Label for="nama_mempelai_1" class="font-medium">Nama Pengantin Pria</Label>
                   <Input
-                    id="nama_memelai_1"
-                    v-model="form.nama_memelai_1"
+                    id="nama_mempelai_1"
+                    v-model="form.nama_mempelai_1"
                     type="text"
                     placeholder="Masukkan nama pengantin pria"
-                    :error="form.errors.nama_memelai_1"
+                    :error="form.errors.nama_mempelai_1"
                     required
                     class="bg-white dark:bg-gray-900"
                   />
-                  <p v-if="form.errors.nama_memelai_1" class="text-sm text-red-500">{{ form.errors.nama_memelai_1 }}</p>
+                  <p v-if="form.errors.nama_mempelai_1" class="text-sm text-red-500">{{ form.errors.nama_mempelai_1 }}</p>
                 </div>
 
                 <div class="space-y-2">
-                  <Label for="nama_memelai_2" class="font-medium">Nama Pengantin Wanita</Label>
+                  <Label for="nama_mempelai_2" class="font-medium">Nama Pengantin Wanita</Label>
                   <Input
-                    id="nama_memelai_2"
-                    v-model="form.nama_memelai_2"
+                    id="nama_mempelai_2"
+                    v-model="form.nama_mempelai_2"
                     type="text"
                     placeholder="Masukkan nama pengantin wanita"
-                    :error="form.errors.nama_memelai_2"
+                    :error="form.errors.nama_mempelai_2"
                     required
                     class="bg-white dark:bg-gray-900"
                   />
-                  <p v-if="form.errors.nama_memelai_2" class="text-sm text-red-500">{{ form.errors.nama_memelai_2 }}</p>
+                  <p v-if="form.errors.nama_mempelai_2" class="text-sm text-red-500">{{ form.errors.nama_mempelai_2 }}</p>
                 </div>
               </div>
 

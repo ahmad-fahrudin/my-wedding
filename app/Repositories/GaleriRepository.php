@@ -16,8 +16,8 @@ class GaleriRepository
         if (isset($filters['search']) && $filters['search']) {
             $search = $filters['search'];
             $query->whereHas('undangan', function ($q) use ($search) {
-                $q->where('nama_memelai_1', 'like', "%{$search}%")
-                    ->orWhere('nama_memelai_2', 'like', "%{$search}%");
+                $q->where('nama_mempelai_1', 'like', "%{$search}%")
+                    ->orWhere('nama_mempelai_2', 'like', "%{$search}%");
             });
         }
 

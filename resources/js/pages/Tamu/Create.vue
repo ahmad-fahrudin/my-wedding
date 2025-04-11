@@ -25,40 +25,40 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 const form = useForm({
-//   undangan_id: '',
+  undangan_id: '',
   nama_tamu: '',
 });
 
 // Dropdown related variables
 const isDropdownOpen = ref(false);
-// const searchTerm = ref('');
+const searchTerm = ref('');
 const dropdownRef = ref(null);
 const selectedUndangan = ref(null);
 
 // Filter undangan based on search term
-// const filteredUndangan = computed(() => {
-//   if (!searchTerm.value) {
-//     return props.undangan.data;
-//   }
+const filteredUndangan = computed(() => {
+  if (!searchTerm.value) {
+    return props.undangan?.data;
+  }
 
-//   const searchLower = searchTerm.value.toLowerCase();
-//   return props.undangan.data.filter(item => {
-//     const fullName = `${item.nama_memelai_1} & ${item.nama_memelai_2}`.toLowerCase();
-//     return fullName.includes(searchLower);
-//   });
-// });
+  const searchLower = searchTerm.value.toLowerCase();
+  return props.undangan?.data.filter(item => {
+    const fullName = `${item.nama_mempelai_1} & ${item.nama_mempelai_2}`.toLowerCase();
+    return fullName.includes(searchLower);
+  });
+});
 
-// // Toggle dropdown visibility
-// function toggleDropdown() {
-//   isDropdownOpen.value = !isDropdownOpen.value;
-// }
+// Toggle dropdown visibility
+function toggleDropdown() {
+  isDropdownOpen.value = !isDropdownOpen.value;
+}
 
-// // Handle selection
-// function selectUndangan(undangan) {
-//   form.undangan_id = undangan.id;
-//   selectedUndangan.value = undangan;
-//   isDropdownOpen.value = false;
-// }
+// Handle selection
+function selectUndangan(undangan) {
+  form.undangan_id = undangan.id;
+  selectedUndangan.value = undangan;
+  isDropdownOpen.value = false;
+}
 
 // Handle click outside
 function handleClickOutside(event) {
@@ -70,7 +70,7 @@ function handleClickOutside(event) {
 // Set initial selected undangan if form has value
 onMounted(() => {
   document.addEventListener('click', handleClickOutside);
-  if (form.undangan_id && props.undangan.data) {
+  if (form.undangan_id && props.undangan?.data) {
     selectedUndangan.value = props.undangan.data.find(item => item.id === form.undangan_id);
   }
 });
@@ -80,6 +80,7 @@ onUnmounted(() => {
 });
 
 function submit() {
+    console.log('Submitting with undangan_id:', form.undangan_id);
   form.post(route('tamus.store'), {
     onSuccess: () => {
       Swal.fire({
@@ -119,7 +120,7 @@ function submit() {
             <Card>
                 <form @submit.prevent="submit">
                     <CardContent class="space-y-4">
-                        <!-- <div class="space-y-2">
+                        <div class="space-y-2">
                             <Label for="undangan_id">Undangan</Label>
                             <div class="relative" ref="dropdownRef">
                                 <button
@@ -127,7 +128,7 @@ function submit() {
                                     @click="toggleDropdown"
                                     class="w-full flex items-center justify-between pl-4 pr-2 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-900 text-sm"
                                 >
-                                    <span v-if="selectedUndangan">{{ selectedUndangan.nama_memelai_1 }} & {{ selectedUndangan.nama_memelai_2 }}</span>
+                                    <span v-if="selectedUndangan">{{ selectedUndangan.nama_mempelai_1 }} & {{ selectedUndangan.nama_mempelai_2 }}</span>
                                     <span v-else class="text-gray-500">Pilih Undangan</span>
                                     <svg class="h-4 w-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -154,7 +155,7 @@ function submit() {
                                             class="w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-800"
                                             :class="{'bg-blue-50 dark:bg-blue-900': form.undangan_id === item.id}"
                                         >
-                                            {{ item.nama_memelai_1 }} & {{ item.nama_memelai_2 }}
+                                            {{ item.nama_mempelai_1 }} & {{ item.nama_mempelai_2 }}
                                         </button>
                                     </div>
                                     <div v-else class="px-4 py-2 text-sm text-gray-500 dark:text-gray-400">
@@ -164,7 +165,7 @@ function submit() {
                                 <input type="hidden" v-model="form.undangan_id" />
                                 <p v-if="form.errors.undangan_id" class="mt-1 text-sm text-red-500">{{ form.errors.undangan_id }}</p>
                             </div>
-                        </div> -->
+                        </div>
 
                         <div class="space-y-2">
                             <Label for="nama_tamu">Nama Tamu</Label>

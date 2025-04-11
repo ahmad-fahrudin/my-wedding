@@ -22,7 +22,7 @@ class TamuRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // 'undangan_id' => 'required|exists:undangans,id',
+            'undangan_id' => 'required|exists:undangans,id',
             'nama_tamu' => 'required|string|max:255',
         ];
     }

@@ -22,8 +22,8 @@ class UndanganRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nama_memelai_1' => 'required|string|max:255',
-            'nama_memelai_2' => 'required|string|max:255',
+            'nama_mempelai_1' => 'required|string|max:255',
+            'nama_mempelai_2' => 'required|string|max:255',
             'tanggal_acara' => 'required|date',
             'waktu_acara' => 'required|string',
             'tempat' => 'required|string',

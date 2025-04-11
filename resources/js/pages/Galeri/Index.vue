@@ -115,7 +115,7 @@ function deleteGaleri(id) {
                                     <img :src="item.image" alt="Gallery Image" class="w-16 h-16 object-cover rounded" />
                                 </td>
                                 <td class="px-4 py-2 whitespace-nowrap text-sm">
-                                    {{ item.undangan ? `${item.undangan.nama_memelai_1} & ${item.undangan.nama_memelai_2}` : '-' }}
+                                    {{ item.undangan ? `${item.undangan.nama_mempelai_1} & ${item.undangan.nama_mempelai_2}` : '-' }}
                                 </td>
                                 <td class="px-4 py-2 whitespace-nowrap">
                                     <div class="flex space-x-1">
