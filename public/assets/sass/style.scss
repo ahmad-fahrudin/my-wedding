@@ -1,0 +1,107 @@
+/*------------------------------------------------------------------
+[Master Stylesheet]
+Theme Name:     Mylove - Wedding HTML5 Template
+Version:        1.0.0
+-------------------------------------------------------------------*/
+
+
+/*--------------------------------------------------------------
+>>> TABLE OF CONTENTS:
+----------------------------------------------------------------
+
+1. General
+	1.1 Theme Reset Style
+	1.2 Global Elements
+
+2. header
+	2.1 topbar
+	2.2 navigation
+
+3. content
+	3.1 wpo-hero-slider
+	3.2 couple-section
+	3.3 wpo-video-section
+	3.4 wpo-story-section
+	3.5 wpo-cta-section
+	3.6 wpo-portfolio-section
+	3.7 wpo-contact-section
+	3.8 wpo-team-section
+	3.9 wpo-event-section
+	3.10 wpo-partners-section
+	3.11 wpo-blog-section
+
+4. wpo-footer
+
+5. Home-style-2
+   5.1 couple-section-s2
+   5.2 wpo-wedding-date
+   5.3 wpo-contact-section-s2
+   5.4 wpo-portfolio-section-s2
+	
+7. wpo-wedding-single-area
+
+8. coming-soon-section
+
+9. wpo-blog-pg-section
+
+10. wpo-blog-single-section
+
+11. error-404-section
+
+----------------------------------------------------------------*/
+
+
+/*------------------------------------------------------------------
+1. General
+----------------------------------------------------------------*/
+
+// helpers
+@import "helpers/variables";
+@import "helpers/functions";
+@import "helpers/mixins";
+
+// base
+@import "base/base";
+
+
+// components
+@import "components/section-title";
+@import "components/buttons";
+@import "components/form";
+@import "components/social-links";
+@import "components/page-title";
+@import "components/preloader";
+@import "components/blog-sidebar";
+@import "components/pagination";
+
+// layout
+@import "layout/header";
+@import "layout/hero-slider";
+@import "layout/footer";
+
+// components
+@import "components/sticky-header";
+
+
+// page
+@import "page/home-default";
+
+@import "page/_home-style2";
+
+@import "page/_about";
+
+@import "page/_wedding-details";
+
+@import "page/_coming-soon";
+
+@import "page/_blog";
+
+@import "page/_blog-single";
+
+@import "page/_error-404";
+
+
+@import "base/color";
+
+
+

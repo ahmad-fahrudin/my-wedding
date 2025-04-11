@@ -1,0 +1,411 @@
+/*======================================
+ 5. Home-style-2 
+ =======================================*/
+
+/*5.1 couple-section-s2*/
+.couple-section-s2 {
+    .couple-area {
+        .couple-item {
+            .couple-img {
+                padding: 0;
+                box-shadow: none;
+                position: relative;
+                overflow: unset;
+                text-align: right;
+
+                @media(max-width:991px) {
+                    text-align: center;
+                }
+
+                img {
+                    width: unset;
+                }
+
+                .couple-shape {
+                    position: absolute;
+                    left: -27px;
+                    top: -11px;
+                    width: 110%;
+
+                    @media(max-width:1400px) {
+                        left: -54px;
+                        top: -10px;
+                        width: 120%;
+                    }
+
+                    @media(max-width:1200px) {
+                        left: -45px;
+                        top: -8px;
+                        width: 120%;
+                    }
+
+                    @media(max-width:991px) {
+                        top: -12px;
+                        width: 110%;
+                    }
+
+                    @media(max-width:475px) {
+                        top: -3%;
+                        width: 120%;
+                        left: -15%;
+                    }
+
+                    @media(max-width:375px) {
+                        left: -17%;
+                    }
+
+                    img {
+                        border-radius: 0;
+                    }
+                }
+            }
+
+            &.groom {
+                .couple-img {
+                    text-align: left;
+
+                    @media(max-width:991px) {
+                        text-align: center;
+                    }
+
+                    .couple-shape {
+                        left: -10px;
+
+                        @media(max-width:991px) {
+                            left: 0;
+                        }
+
+                        @media(max-width:475px) {
+                            left: -5%;
+                        }
+
+                        @media(max-width:375px) {
+                            left: -3%;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/*5.2 wpo-wedding-date*/
+
+.wpo-wedding-time {
+    text-align: center;
+    padding-bottom: 0;
+    position: relative;
+
+    @media(max-width:767px) {
+        margin-top: 0;
+    }
+
+
+    .clock-grids {
+        background: $theme-primary-color-s2;
+        position: relative;
+
+        &:before {
+            position: absolute;
+            left: 1%;
+            top: 7%;
+            width: 98%;
+            height: 87%;
+            content: "";
+            border: 2px solid $border-color;
+        }
+
+        .frame1 {
+            position: absolute;
+            left: 1%;
+            top: 7%;
+        }
+
+        .frame2 {
+            position: absolute;
+            left: 1%;
+            bottom: 7%;
+        }
+
+        .frame3 {
+            position: absolute;
+            right: 1%;
+            top: 7%;
+        }
+
+        .frame4 {
+            position: absolute;
+            right: 1%;
+            bottom: 7%;
+        }
+    }
+
+    #clock2 {
+        overflow: hidden;
+        text-align: center;
+        display: inline-block;
+        padding: 50px 0;
+
+        @include media-query(1200px) {
+            display: flex;
+            justify-content: center;
+        }
+
+        >div {
+            width: 280px;
+            float: left;
+            display: table;
+            position: relative;
+
+            @include media-query(1400px) {
+                width: 220px;
+            }
+
+            &:before {
+                position: absolute;
+                right: -30px;
+                top: 0;
+                width: 20px;
+                height: 100%;
+                content: "";
+                background: url(../images/countdown/shape.jpg) no-repeat center center;
+
+                @include media-query(1400px) {
+                    top: -10px;
+                    width: 20px;
+                    height: 126%;
+                }
+
+                @include media-query(767px) {
+                    display: none;
+                }
+            }
+
+            &:last-child {
+                &:before {
+                    display: none;
+                }
+            }
+
+            >div {
+                display: table-cell;
+                vertical-align: middle;
+            }
+        }
+
+        >div+div {
+            margin-left: 50px;
+
+            @include media-query(991px) {
+                margin-left: 20px;
+            }
+
+            @include media-query(767px) {
+                margin-left: 10px;
+            }
+        }
+
+        .time {
+            font-family: $heading-font;
+            font-size: 60px;
+            font-size: calc-rem-value(60);
+            line-height: 1em;
+            padding-top: 15px;
+            color: $dark-gray;
+
+            @include media-query(1200px) {
+                font-size: 40px;
+                font-size: calc-rem-value(40);
+            }
+
+            @include media-query(991px) {
+                font-size: 30px;
+                font-size: calc-rem-value(30);
+            }
+
+            @include media-query(575px) {
+                font-size: 25px;
+                font-size: calc-rem-value(25);
+            }
+        }
+
+        span {
+            color: #4D4D4D;
+            font-size: 25px;
+
+            @include media-query(1200px) {
+                font-size: 18px;
+            }
+
+            @include media-query(575px) {
+                font-size: 14px;
+            }
+        }
+    }
+}
+
+
+/*5.3 wpo-contact-section-s2*/
+
+.wpo-contact-section-s2 {
+    padding-top: 170px;
+
+    @media(max-width:991px) {
+        padding-top: 90px;
+    }
+
+    @media(max-width:575px) {
+        padding-top: 0px;
+    }
+
+    .wpo-rsvp-wrap {
+        position: relative;
+        z-index: 1;
+
+        .right-img {
+            position: absolute;
+            right: 5%;
+            top: -20%;
+            z-index: -1;
+
+            @media(max-width:1200px) {
+                right: -7%;
+            }
+
+            @media(max-width:991px) {
+                display: none;
+            }
+        }
+    }
+}
+
+
+/*5.4 wpo-portfolio-section-s2*/
+
+.wpo-portfolio-section-s2 {
+    .portfolio-grids {
+        .grid {
+            width: 100%;
+            float: none;
+            padding: 0;
+
+            .img-holder {
+                &:before {
+                    z-index: 1;
+                }
+
+                .hover-content {
+                    z-index: 11;
+                }
+            }
+        }
+
+        .owl-controls {
+            width: 100%;
+            margin: 0;
+            position: absolute;
+            left: 0;
+            top: 50%;
+            @include translatingY();
+        }
+
+        .owl-nav [class*=owl-] {
+            padding: 0;
+            margin: 0;
+            color: $theme-primary-color;
+            @include transition-time(0.3s);
+            border: 0;
+            background: none;
+
+            .fi {
+                &::before {
+                    font-size: 20px;
+                    color: $theme-primary-color-s2;
+                }
+            }
+        }
+
+        .owl-nav .owl-prev,
+        .owl-nav .owl-next {
+            position: absolute;
+            top: 50%;
+            @include translatingY(-50%);
+            background: $theme-primary-color;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            opacity: 0;
+            transition: all .3s;
+
+            &:hover {
+                background:darken($theme-primary-color, 9);
+
+                .fi {
+                    &:before {
+                        color: $white;
+                    }
+                }
+            }
+
+            @media(max-width:575px) {
+                display: none;
+            }
+        }
+
+        .owl-nav .owl-prev {
+            left: 35px;
+        }
+
+        .owl-nav .owl-next {
+            right: 35px;
+        }
+
+        .owl-dots {
+            text-align: center;
+            bottom: -40px;
+            position: relative;
+
+            button {
+                width: 10px;
+                height: 12px;
+                border: 0;
+                background: #d4e6f5;
+                margin-right: 10px;
+                border-radius: 50%;
+            }
+
+            .owl-dot.active {
+                background-color: $theme-primary-color;
+            }
+        }
+
+        &:hover {
+
+            .owl-nav .owl-prev,
+            .owl-nav .owl-next {
+                opacity: 1;
+
+            }
+        }
+    }
+}
+
+// wpo-contact-map-section
+
+.wpo-contact-map-section {
+	.wpo-contact-map {
+	    height: 550px;
+	}
+
+    iframe {
+	    width: 100%;
+	    height: 100%;
+	    border: 0;
+	    outline: 0;
+		filter: grayscale(100%);
+	}
+
+	h2.hidden{
+		display: none;
+	}
+}

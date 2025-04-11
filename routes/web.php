@@ -1,9 +1,11 @@
 <?php
 
 use Inertia\Inertia;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TamuController;
 use App\Http\Controllers\GaleriController;
+use App\Http\Controllers\ContentController;
 use App\Http\Controllers\UndanganController;
 
 Route::get('/', function () {
@@ -37,6 +39,9 @@ Route::post('/galeris', [GaleriController::class, 'store'])->name('galeris.store
 Route::get('/galeris/{id}/edit', [GaleriController::class, 'edit'])->name('galeris.edit');
 Route::put('/galeris/{id}', [GaleriController::class, 'update'])->name('galeris.update');
 Route::delete('/galeris/{id}', [GaleriController::class, 'destroy'])->name('galeris.destroy');
+
+// content
+Route::get('/contents', [ContentController::class, 'index'])->name('contents.index');
 
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';
