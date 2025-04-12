@@ -6,24 +6,24 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="author" content="wpOceans">
-    <link rel="shortcut icon" type="image/png" href="{{ asset('assets/images/favicon.png') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('mylove/images/favicon.png') }}">
     <title> Mylove - Wedding HTML5 Template</title>
-    <link href="{{ asset('assets/css/themify-icons.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/css/font-awesome.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/css/flaticon.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/css/magnific-popup.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/css/animate.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/css/owl.carousel.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/css/owl.theme.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/css/slick.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/css/slick-theme.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/css/swiper.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/css/nice-select.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/css/owl.transitions.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/css/jquery.fancybox.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/css/odometer-theme-default.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/sass/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('mylove/css/themify-icons.css') }}" rel="stylesheet">
+    <link href="{{ asset('mylove/css/font-awesome.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('mylove/css/flaticon.css') }}" rel="stylesheet">
+    <link href="{{ asset('mylove/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('mylove/css/magnific-popup.css') }}" rel="stylesheet">
+    <link href="{{ asset('mylove/css/animate.css') }}" rel="stylesheet">
+    <link href="{{ asset('mylove/css/owl.carousel.css') }}" rel="stylesheet">
+    <link href="{{ asset('mylove/css/owl.theme.css') }}" rel="stylesheet">
+    <link href="{{ asset('mylove/css/slick.css') }}" rel="stylesheet">
+    <link href="{{ asset('mylove/css/slick-theme.css') }}" rel="stylesheet">
+    <link href="{{ asset('mylove/css/swiper.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('mylove/css/nice-select.css') }}" rel="stylesheet">
+    <link href="{{ asset('mylove/css/owl.transitions.css') }}" rel="stylesheet">
+    <link href="{{ asset('mylove/css/jquery.fancybox.css') }}" rel="stylesheet">
+    <link href="{{ asset('mylove/css/odometer-theme-default.css') }}" rel="stylesheet">
+    <link href="{{ asset('mylove/sass/style.css') }}" rel="stylesheet">
 </head>
 
 <body>
@@ -38,7 +38,7 @@
                     <div class="loader-line-mask">
                         <div class="loader-line"></div>
                     </div>
-                    <img src="assets/images/preloader.png" alt="">
+                    <img src="{{ asset('mylove/images/preloader.png') }}" alt="">
                 </div>
             </div>
         </div>
@@ -144,7 +144,7 @@
                         <div class="row align-items-center">
                             <div class="col-xl-8 col-lg-6 col-12">
                                 <div class="wpo-static-hero-inner">
-                                    <div class="shape-1"><img src="assets/images/slider/shape.svg" alt=""></div>
+                                    <div class="shape-1"><img src="{{ asset('mylove/images/slider/shape.svg') }}" alt=""></div>
                                     <div data-swiper-parallax="300" class="slide-title">
                                         <h2>Alexander <span>&</span> Jenny</h2>
                                     </div>
@@ -166,10 +166,10 @@
             <div class="static-hero-right">
                 <div class="static-hero-img">
                     <div class="static-hero-img-inner">
-                        <img src="assets/images/slider/s1.png" alt="">
+                        <img src="{{ asset('mylove/images/slider/s1.png') }}" alt="">
                     </div>
-                    <div class="static-hero-shape-1 floating-item"><img src="assets/images/slider/flower1.png" alt=""></div>
-                    <div class="static-hero-shape-2 floating-item"><img src="assets/images/slider/flower2.png" alt=""></div>
+                    <div class="static-hero-shape-1 floating-item"><img src="{{ asset('mylove/images/slider/flower1.png') }}" alt=""></div>
+                    <div class="static-hero-shape-2 floating-item"><img src="{{ asset('mylove/images/slider/flower2.png') }}" alt=""></div>
                 </div>
             </div>
         </section>
@@ -184,7 +184,7 @@
                                 <div class="row align-items-center">
                                     <div class="col-lg-4">
                                         <div class="couple-img">
-                                            <img src="assets/images/couple/2.jpg" alt="">
+                                            <img src="{{ asset('mylove/images/couple/2.jpg') }}" alt="">
                                         </div>
                                     </div>
                                     <div class="col-lg-7">
@@ -227,7 +227,7 @@
                                     </div>
                                     <div class="col-lg-4 order-lg-2 order-1">
                                         <div class="couple-img">
-                                            <img src="assets/images/couple/3.jpg" alt="">
+                                            <img src="{{ asset('mylove/images/couple/3.jpg') }}" alt="">
                                         </div>
                                     </div>
                                 </div>
@@ -237,10 +237,10 @@
                 </div>
             </div> <!-- end container -->
             <div class="shape-1">
-                <img src="assets/images/couple/shape-1.png" alt="">
+                <img src="{{ asset('mylove/images/couple/shape-1.png') }}" alt="">
             </div>
             <div class="shape-2">
-                <img src="assets/images/couple/shape-2.png" alt="">
+                <img src="{{ asset('mylove/images/couple/shape-2.png') }}" alt="">
             </div>
         </section>
         <!-- end couple-section -->
@@ -275,7 +275,7 @@
                                 <div class="row align-items-center">
                                     <div class="col col-lg-6 col-12">
                                         <div class="img-holder right-align-text wow fadeInLeftSlow" data-wow-duration="1500ms">
-                                            <img src="assets/images/story/1.jpg" alt class="img img-responsive">
+                                            <img src="{{ asset('mylove/images/story/1.jpg') }}" alt class="img img-responsive">
                                         </div>
                                     </div>
                                     <div class="col col-lg-6 col-12">
@@ -308,7 +308,7 @@
                                     </div>
                                     <div class="col col-lg-6 col-12 order-lg-2 order-1">
                                         <div class="img-holder left-align-text">
-                                            <img src="assets/images/story/2.jpg" alt class="img img-responsive wow fadeInRightSlow" data-wow-duration="1500ms">
+                                            <img src="{{ asset('mylove/images/story/2.jpg') }}" alt class="img img-responsive wow fadeInRightSlow" data-wow-duration="1500ms">
                                             <span class="heart">
                                                 <i class="fi flaticon-dance"></i>
                                             </span>
@@ -320,7 +320,7 @@
                                 <div class="row align-items-center">
                                     <div class="col col-lg-6 col-12">
                                         <div class="img-holder right-align-text left-site right-heart">
-                                            <img src="assets/images/story/3.jpg" alt class="img img-responsive wow fadeInLeftSlow" data-wow-duration="1500ms">
+                                            <img src="{{ asset('mylove/images/story/3.jpg') }}" alt class="img img-responsive wow fadeInLeftSlow" data-wow-duration="1500ms">
                                             <span class="heart">
                                                 <i class="fi flaticon-dove"></i>
                                             </span>
@@ -346,12 +346,12 @@
             </div> <!-- end container -->
             <div class="shape-1">
                 <div class="sticky-shape">
-                    <img src="assets/images/rsvp/shape1.png" alt="">
+                    <img src="{{ asset('mylove/images/rsvp/shape1.png') }}" alt="">
                 </div>
             </div>
             <div class="shape-2">
                 <div class="sticky-shape">
-                    <img src="assets/images/rsvp/shape2.png" alt="">
+                    <img src="{{ asset('mylove/images/rsvp/shape2.png') }}" alt="">
                 </div>
             </div>
         </section>
@@ -388,8 +388,8 @@
                             <div class="portfolio-grids gallery-container clearfix">
                                 <div class="grid">
                                     <div class="img-holder">
-                                        <a href="assets/images/portfolio/1.jpg" class="fancybox" data-fancybox-group="gall-1">
-                                            <img src="assets/images/portfolio/1.jpg" alt class="img img-responsive">
+                                        <a href="{{ asset('mylove/images/portfolio/1.jpg') }}" class="fancybox" data-fancybox-group="gall-1">
+                                            <img src="{{ asset('mylove/images/portfolio/1.jpg') }}" alt class="img img-responsive">
                                             <div class="hover-content">
                                                 <i class="ti-plus"></i>
                                             </div>
@@ -398,8 +398,8 @@
                                 </div>
                                 <div class="grid">
                                     <div class="img-holder">
-                                        <a href="assets/images/portfolio/2.jpg" class="fancybox" data-fancybox-group="gall-1">
-                                            <img src="assets/images/portfolio/2.jpg" alt class="img img-responsive">
+                                        <a href="{{ asset('mylove/images/portfolio/2.jpg') }}" class="fancybox" data-fancybox-group="gall-1">
+                                            <img src="{{ asset('mylove/images/portfolio/2.jpg') }}" alt class="img img-responsive">
                                             <div class="hover-content">
                                                 <i class="ti-plus"></i>
                                             </div>
@@ -408,8 +408,8 @@
                                 </div>
                                 <div class="grid">
                                     <div class="img-holder">
-                                        <a href="assets/images/portfolio/3.jpg" class="fancybox" data-fancybox-group="gall-1">
-                                            <img src="assets/images/portfolio/3.jpg" alt class="img img-responsive">
+                                        <a href="{{ asset('mylove/images/portfolio/3.jpg') }}" class="fancybox" data-fancybox-group="gall-1">
+                                            <img src="{{ asset('mylove/images/portfolio/3.jpg') }}" alt class="img img-responsive">
                                             <div class="hover-content">
                                                 <i class="ti-plus"></i>
                                             </div>
@@ -418,8 +418,8 @@
                                 </div>
                                 <div class="grid">
                                     <div class="img-holder">
-                                        <a href="assets/images/portfolio/5.jpg" class="fancybox" data-fancybox-group="gall-1">
-                                            <img src="assets/images/portfolio/5.jpg" alt class="img img-responsive">
+                                        <a href="{{ asset('mylove/images/portfolio/5.jpg') }}" class="fancybox" data-fancybox-group="gall-1">
+                                            <img src="{{ asset('mylove/images/portfolio/5.jpg') }}" alt class="img img-responsive">
                                             <div class="hover-content">
                                                 <i class="ti-plus"></i>
                                             </div>
@@ -428,8 +428,8 @@
                                 </div>
                                 <div class="grid">
                                     <div class="img-holder">
-                                        <a href="assets/images/portfolio/4.jpg" class="fancybox" data-fancybox-group="gall-1">
-                                            <img src="assets/images/portfolio/4.jpg" alt class="img img-responsive">
+                                        <a href="{{ asset('mylove/images/portfolio/4.jpg') }}" class="fancybox" data-fancybox-group="gall-1">
+                                            <img src="{{ asset('mylove/images/portfolio/4.jpg') }}" alt class="img img-responsive">
                                             <div class="hover-content">
                                                 <i class="ti-plus"></i>
                                             </div>
@@ -438,8 +438,8 @@
                                 </div>
                                 <div class="grid">
                                     <div class="img-holder">
-                                        <a href="assets/images/portfolio/6.jpg" class="fancybox" data-fancybox-group="gall-1">
-                                            <img src="assets/images/portfolio/6.jpg" alt class="img img-responsive">
+                                        <a href="{{ asset('mylove/images/portfolio/6.jpg') }}" class="fancybox" data-fancybox-group="gall-1">
+                                            <img src="{{ asset('mylove/images/portfolio/6.jpg') }}" alt class="img img-responsive">
                                             <div class="hover-content">
                                                 <i class="ti-plus"></i>
                                             </div>
@@ -521,18 +521,18 @@
                         <div class="border-style"></div>
                     </div>
                     <div class="vector-1">
-                        <img src="assets/images/rsvp/flower1.png" alt="">
+                        <img src="{{ asset('mylove/images/rsvp/flower1.png') }}" alt="">
                     </div>
                     <div class="vector-2">
-                        <img src="assets/images/rsvp/flower2.png" alt="">
+                        <img src="{{ asset('mylove/images/rsvp/flower2.png') }}" alt="">
                     </div>
                 </div>
             </div>
             <div class="shape-1">
-                <img src="assets/images/rsvp/shape1.png" alt="">
+                <img src="{{ asset('mylove/images/rsvp/shape1.png') }}" alt="">
             </div>
             <div class="shape-2">
-                <img src="assets/images/rsvp/shape2.png" alt="">
+                <img src="{{ asset('mylove/images/rsvp/shape2.png') }}" alt="">
             </div>
         </section>
         <!-- end of wpo-contact-section -->
@@ -553,10 +553,10 @@
                             <div class="wpo-team-item">
                                 <div class="wpo-team-img">
                                     <div class="wpo-team-img-inner">
-                                        <img src="assets/images/team/img-1.jpg" alt="">
+                                        <img src="{{ asset('mylove/images/team/img-1.jpg') }}" alt="">
                                     </div>
-                                    <div class="shape-1"><img src="assets/images/team/shape1.jpg" alt=""></div>
-                                    <div class="shape-2"><img src="assets/images/team/shape2.jpg" alt=""></div>
+                                    <div class="shape-1"><img src="{{ asset('mylove/images/team/shape1.jpg') }}" alt=""></div>
+                                    <div class="shape-2"><img src="{{ asset('mylove/images/team/shape2.jpg') }}" alt=""></div>
                                 </div>
                                 <div class="wpo-team-text">
                                     <h3><a href="groom-bride.html">Leslie Alexander</a></h3>
@@ -568,10 +568,10 @@
                             <div class="wpo-team-item">
                                 <div class="wpo-team-img">
                                     <div class="wpo-team-img-inner">
-                                        <img src="assets/images/team/img-2.jpg" alt="">
+                                        <img src="{{ asset('mylove/images/team/img-2.jpg') }}" alt="">
                                     </div>
-                                    <div class="shape-1"><img src="assets/images/team/shape1.jpg" alt=""></div>
-                                    <div class="shape-2"><img src="assets/images/team/shape2.jpg" alt=""></div>
+                                    <div class="shape-1"><img src="{{ asset('mylove/images/team/shape1.jpg') }}" alt=""></div>
+                                    <div class="shape-2"><img src="{{ asset('mylove/images/team/shape2.jpg') }}" alt=""></div>
                                 </div>
                                 <div class="wpo-team-text">
                                     <h3><a href="groom-bride.html">Jenny Wilson</a></h3>
@@ -583,10 +583,10 @@
                             <div class="wpo-team-item">
                                 <div class="wpo-team-img">
                                     <div class="wpo-team-img-inner">
-                                        <img src="assets/images/team/img-3.jpg" alt="">
+                                        <img src="{{ asset('mylove/images/team/img-3.jpg') }}" alt="">
                                     </div>
-                                    <div class="shape-1"><img src="assets/images/team/shape1.jpg" alt=""></div>
-                                    <div class="shape-2"><img src="assets/images/team/shape2.jpg" alt=""></div>
+                                    <div class="shape-1"><img src="{{ asset('mylove/images/team/shape1.jpg') }}" alt=""></div>
+                                    <div class="shape-2"><img src="{{ asset('mylove/images/team/shape2.jpg') }}" alt=""></div>
                                 </div>
                                 <div class="wpo-team-text">
                                     <h3><a href="groom-bride.html">Robert Fox</a></h3>
@@ -598,10 +598,10 @@
                             <div class="wpo-team-item">
                                 <div class="wpo-team-img">
                                     <div class="wpo-team-img-inner">
-                                        <img src="assets/images/team/img-4.jpg" alt="">
+                                        <img src="{{ asset('mylove/images/team/img-4.jpg') }}" alt="">
                                     </div>
-                                    <div class="shape-1"><img src="assets/images/team/shape1.jpg" alt=""></div>
-                                    <div class="shape-2"><img src="assets/images/team/shape2.jpg" alt=""></div>
+                                    <div class="shape-1"><img src="{{ asset('mylove/images/team/shape1.jpg') }}" alt=""></div>
+                                    <div class="shape-2"><img src="{{ asset('mylove/images/team/shape2.jpg') }}" alt=""></div>
                                 </div>
                                 <div class="wpo-team-text">
                                     <h3><a href="groom-bride.html">Jerome Bell</a></h3>
@@ -613,10 +613,10 @@
                             <div class="wpo-team-item">
                                 <div class="wpo-team-img">
                                     <div class="wpo-team-img-inner">
-                                        <img src="assets/images/team/img-5.jpg" alt="">
+                                        <img src="{{ asset('mylove/images/team/img-5.jpg') }}" alt="">
                                     </div>
-                                    <div class="shape-1"><img src="assets/images/team/shape1.jpg" alt=""></div>
-                                    <div class="shape-2"><img src="assets/images/team/shape2.jpg" alt=""></div>
+                                    <div class="shape-1"><img src="{{ asset('mylove/images/team/shape1.jpg') }}" alt=""></div>
+                                    <div class="shape-2"><img src="{{ asset('mylove/images/team/shape2.jpg') }}" alt=""></div>
                                 </div>
                                 <div class="wpo-team-text">
                                     <h3><a href="groom-bride.html">Esther Howard</a></h3>
@@ -628,10 +628,10 @@
                             <div class="wpo-team-item">
                                 <div class="wpo-team-img">
                                     <div class="wpo-team-img-inner">
-                                        <img src="assets/images/team/img-6.jpg" alt="">
+                                        <img src="{{ asset('mylove/images/team/img-6.jpg') }}" alt="">
                                     </div>
-                                    <div class="shape-1"><img src="assets/images/team/shape1.jpg" alt=""></div>
-                                    <div class="shape-2"><img src="assets/images/team/shape2.jpg" alt=""></div>
+                                    <div class="shape-1"><img src="{{ asset('mylove/images/team/shape1.jpg') }}" alt=""></div>
+                                    <div class="shape-2"><img src="{{ asset('mylove/images/team/shape2.jpg') }}" alt=""></div>
                                 </div>
                                 <div class="wpo-team-text">
                                     <h3><a href="groom-bride.html">Bessie Cooper</a></h3>
@@ -718,19 +718,19 @@
                     <div class="col col-xs-12">
                         <div class="partner-grids partners-slider owl-carousel">
                             <div class="grid">
-                                <img src="assets/images/partners/1.png" alt>
+                                <img src="{{ asset('mylove/images/partners/1.png') }}" alt>
                             </div>
                             <div class="grid">
-                                <img src="assets/images/partners/2.png" alt>
+                                <img src="{{ asset('mylove/images/partners/2.png') }}" alt>
                             </div>
                             <div class="grid">
-                                <img src="assets/images/partners/3.png" alt>
+                                <img src="{{ asset('mylove/images/partners/3.png') }}" alt>
                             </div>
                             <div class="grid">
-                                <img src="assets/images/partners/4.png" alt>
+                                <img src="{{ asset('mylove/images/partners/4.png') }}" alt>
                             </div>
                             <div class="grid">
-                                <img src="assets/images/partners/5.png" alt>
+                                <img src="{{ asset('mylove/images/partners/5.png') }}" alt>
                             </div>
                         </div>
                     </div>
@@ -754,7 +754,7 @@
                         <div class="col col-lg-4 col-md-6 col-12">
                             <div class="wpo-blog-item">
                                 <div class="wpo-blog-img">
-                                    <img src="assets/images/blog/img-1.jpg" alt="">
+                                    <img src="{{ asset('mylove/images/blog/img-1.jpg') }}" alt="">
                                     <div class="thumb">Decoration</div>
                                 </div>
                                 <div class="wpo-blog-content">
@@ -771,7 +771,7 @@
                         <div class="col col-lg-4 col-md-6 col-12">
                             <div class="wpo-blog-item">
                                 <div class="wpo-blog-img">
-                                    <img src="assets/images/blog/img-2.jpg" alt="">
+                                    <img src="{{ asset('mylove/images/blog/img-2.jpg') }}" alt="">
                                     <div class="thumb">Wedding</div>
                                 </div>
                                 <div class="wpo-blog-content">
@@ -788,7 +788,7 @@
                         <div class="col col-lg-4 col-md-6 col-12">
                             <div class="wpo-blog-item">
                                 <div class="wpo-blog-img">
-                                    <img src="assets/images/blog/img-3.jpg" alt="">
+                                    <img src="{{ asset('mylove/images/blog/img-3.jpg') }}" alt="">
                                     <div class="thumb">Photography</div>
                                 </div>
                                 <div class="wpo-blog-content">
@@ -922,16 +922,16 @@
 
     <!-- All JavaScript files
     ================================================== -->
-    <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
-    <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('mylove/js/jquery.min.js') }}"></script>
+    <script src="{{ asset('mylove/js/bootstrap.bundle.min.js') }}"></script>
     <!-- Plugins for this template -->
-    <script src="{{ asset('assets/js/modernizr.custom.js') }}"></script>
-    <script src="{{ asset('assets/js/jquery.dlmenu.js') }}"></script>
-    <script src="{{ asset('assets/js/jquery-plugin-collection.js') }}"></script>
+    <script src="{{ asset('mylove/js/modernizr.custom.js') }}"></script>
+    <script src="{{ asset('mylove/js/jquery.dlmenu.js') }}"></script>
+    <script src="{{ asset('mylove/js/jquery-plugin-collection.js') }}"></script>
     <!-- Moving Animation -->
-    <script src="{{ asset('assets/js/moving-animation.js') }}"></script>
+    <script src="{{ asset('mylove/js/moving-animation.js') }}"></script>
     <!-- Custom script for this template -->
-    <script src="{{ asset('assets/js/script.js') }}"></script>
+    <script src="{{ asset('mylove/js/script.js') }}"></script>
 </body>
 
 </html>

@@ -22,8 +22,13 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 const form = useForm({
   undangan_id: '',
-  image: null,
-  tema: 'tema1', // Default value for theme
+  tema: 'tema1',
+});
+
+const hasPreviewData = ref(false);
+const previewUrl = computed(() => {
+  if (!form.undangan_id || !form.tema) return '';
+  return `/undangans/preview/${form.undangan_id}/${form.tema}`;
 });
 
 // Dropdown related variables
@@ -95,32 +100,90 @@ onUnmounted(() => {
 });
 
 function submit() {
-  form.post(route('content.store'), {
-    onSuccess: () => {
-      Swal.fire({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-                icon: 'success',
-                title: 'Foto galeri berhasil ditambahkan'
-      })
-    },
-    onError: () => {
-      Swal.fire({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-                icon: 'error',
-                title: 'Gagal menambahkan foto galeri'
-      });
-    },
-  });
+  if (form.undangan_id && form.tema) {
+    hasPreviewData.value = true;
+    form.post(route('undangans.contents.store'), {
+      onSuccess: () => {
+        Swal.fire({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          icon: 'success',
+          title: 'Preview undangan berhasil ditampilkan'
+        });
+      },
+      onError: () => {
+        Swal.fire({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          icon: 'error',
+          title: 'Gagal menampilkan preview undangan'
+        });
+      },
+    });
+  }
 }
 </script>
+
+<style scoped>
+.mobile-preview {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.mobile-frame {
+  width: 400px;
+  height: 650px;
+  background-color: #111;
+  border-radius: 36px;
+  padding: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+.mobile-top {
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mobile-notch {
+  width: 150px;
+  height: 20px;
+  background-color: #111;
+  border-radius: 0 0 15px 15px;
+}
+
+.mobile-screen {
+  flex: 1;
+  background-color: white;
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+}
+
+.mobile-bottom {
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mobile-home-button {
+  width: 40px;
+  height: 4px;
+  background-color: #444;
+  border-radius: 2px;
+}
+</style>
 
 <template>
     <Head title="Hasil Undangan" />
@@ -131,103 +194,140 @@ function submit() {
                 <h1 class="text-2xl font-bold">Hasil Undangan</h1>
             </div>
 
-            <Card>
-                <form @submit.prevent="submit">
-                    <CardContent class="space-y-4">
-                        <div class="space-y-2">
-                            <Label for="undangan_id">Undangan</Label>
-                            <div class="relative" ref="dropdownRef">
-                                <button
-                                    type="button"
-                                    @click="toggleDropdown"
-                                    class="w-full flex items-center justify-between pl-4 pr-2 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-900 text-sm"
-                                >
-                                    <span v-if="selectedUndangan">{{ selectedUndangan.nama_mempelai_1 }} & {{ selectedUndangan.nama_mempelai_2 }}</span>
-                                    <span v-else class="text-gray-500">Pilih Undangan</span>
-                                    <svg class="h-4 w-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                    </svg>
-                                </button>
-
-                                <div v-show="isDropdownOpen" class="absolute z-10 mt-1 w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md shadow-lg max-h-60 overflow-auto">
-                                    <div class="sticky top-0 z-10 bg-white dark:bg-gray-900 p-2 border-b border-gray-200 dark:border-gray-700">
-                                        <Input
-                                            id="undangan-search"
-                                            v-model="searchTerm"
-                                            type="text"
-                                            placeholder="Cari undangan..."
-                                            class="w-full"
-                                            @click.stop
-                                        />
-                                    </div>
-                                    <div v-if="filteredUndangan.length" class="py-1">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                <!-- Form Section - 6 columns -->
+                <div class="md:col-span-6">
+                    <Card>
+                        <form @submit.prevent="submit">
+                            <CardContent class="space-y-4">
+                                <div class="space-y-2">
+                                    <Label for="undangan_id">Undangan</Label>
+                                    <div class="relative" ref="dropdownRef">
+                                        <!-- Existing dropdown code for undangan -->
                                         <button
-                                            v-for="item in filteredUndangan"
-                                            :key="item.id"
                                             type="button"
-                                            @click="selectUndangan(item)"
-                                            class="w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-800"
-                                            :class="{'bg-blue-50 dark:bg-blue-900': form.undangan_id === item.id}"
+                                            @click="toggleDropdown"
+                                            class="w-full flex items-center justify-between pl-4 pr-2 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-900 text-sm"
                                         >
-                                            {{ item.nama_mempelai_1 }} & {{ item.nama_mempelai_2 }}
+                                            <span v-if="selectedUndangan">{{ selectedUndangan.nama_mempelai_1 }} & {{ selectedUndangan.nama_mempelai_2 }}</span>
+                                            <span v-else class="text-gray-500">Pilih Undangan</span>
+                                            <svg class="h-4 w-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                            </svg>
                                         </button>
-                                    </div>
-                                    <div v-else class="px-4 py-2 text-sm text-gray-500 dark:text-gray-400">
-                                        Undangan tidak ditemukan
+
+                                        <div v-show="isDropdownOpen" class="absolute z-10 mt-1 w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md shadow-lg max-h-60 overflow-auto">
+                                            <div class="sticky top-0 z-10 bg-white dark:bg-gray-900 p-2 border-b border-gray-200 dark:border-gray-700">
+                                                <Input
+                                                    id="undangan-search"
+                                                    v-model="searchTerm"
+                                                    type="text"
+                                                    placeholder="Cari undangan..."
+                                                    class="w-full"
+                                                    @click.stop
+                                                />
+                                            </div>
+                                            <div v-if="filteredUndangan.length" class="py-1">
+                                                <button
+                                                    v-for="item in filteredUndangan"
+                                                    :key="item.id"
+                                                    type="button"
+                                                    @click="selectUndangan(item)"
+                                                    class="w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-800"
+                                                    :class="{'bg-blue-50 dark:bg-blue-900': form.undangan_id === item.id}"
+                                                >
+                                                    {{ item.nama_mempelai_1 }} & {{ item.nama_mempelai_2 }}
+                                                </button>
+                                            </div>
+                                            <div v-else class="px-4 py-2 text-sm text-gray-500 dark:text-gray-400">
+                                                Undangan tidak ditemukan
+                                            </div>
+                                        </div>
+                                        <input type="hidden" v-model="form.undangan_id" />
+                                        <p v-if="form.errors.undangan_id" class="mt-1 text-sm text-red-500">{{ form.errors.undangan_id }}</p>
                                     </div>
                                 </div>
-                                <input type="hidden" v-model="form.undangan_id" />
-                                <p v-if="form.errors.undangan_id" class="mt-1 text-sm text-red-500">{{ form.errors.undangan_id }}</p>
-                            </div>
-                        </div>
 
-                        <div class="space-y-2">
-                            <Label for="tema">Tema</Label>
-                            <div class="relative" ref="themeDropdownRef">
-                                <button
-                                    type="button"
-                                    @click="toggleThemeDropdown"
-                                    class="w-full flex items-center justify-between pl-4 pr-2 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-900 text-sm"
-                                >
-                                    <span>{{ form.tema === 'tema1' ? 'Tema 1' : 'Tema 2' }}</span>
-                                    <svg class="h-4 w-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                    </svg>
-                                </button>
-
-                                <div v-show="isThemeDropdownOpen" class="absolute z-10 mt-1 w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md shadow-lg">
-                                    <div class="py-1">
+                                <div class="space-y-2">
+                                    <Label for="tema">Tema</Label>
+                                    <div class="relative" ref="themeDropdownRef">
+                                        <!-- Existing theme dropdown code -->
                                         <button
                                             type="button"
-                                            @click="selectTheme('tema1')"
-                                            class="w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-800"
-                                            :class="{'bg-blue-50 dark:bg-blue-900': form.tema === 'tema1'}"
+                                            @click="toggleThemeDropdown"
+                                            class="w-full flex items-center justify-between pl-4 pr-2 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-900 text-sm"
                                         >
-                                            Tema 1
+                                            <span>{{ form.tema === 'tema1' ? 'Tema 1' : 'Tema 2' }}</span>
+                                            <svg class="h-4 w-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                            </svg>
                                         </button>
-                                        <button
-                                            type="button"
-                                            @click="selectTheme('tema2')"
-                                            class="w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-800"
-                                            :class="{'bg-blue-50 dark:bg-blue-900': form.tema === 'tema2'}"
-                                        >
-                                            Tema 2
-                                        </button>
+
+                                        <div v-show="isThemeDropdownOpen" class="absolute z-10 mt-1 w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md shadow-lg">
+                                            <div class="py-1">
+                                                <button
+                                                    type="button"
+                                                    @click="selectTheme('tema1')"
+                                                    class="w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-800"
+                                                    :class="{'bg-blue-50 dark:bg-blue-900': form.tema === 'tema1'}"
+                                                >
+                                                    Tema 1
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    @click="selectTheme('tema2')"
+                                                    class="w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-800"
+                                                    :class="{'bg-blue-50 dark:bg-blue-900': form.tema === 'tema2'}"
+                                                >
+                                                    Tema 2
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" v-model="form.tema" />
+                                        <p v-if="form.errors.tema" class="mt-1 text-sm text-red-500">{{ form.errors.tema }}</p>
                                     </div>
                                 </div>
-                                <input type="hidden" v-model="form.tema" />
-                                <p v-if="form.errors.tema" class="mt-1 text-sm text-red-500">{{ form.errors.tema }}</p>
+                            </CardContent>
+                            <CardFooter class="flex justify-between">
+                                <Link :href="route('galeris.index')">
+                                    <Button type="button" variant="outline">Batal</Button>
+                                </Link>
+                                <Button type="submit" :disabled="form.processing">Lihat Hasil</Button>
+                            </CardFooter>
+                        </form>
+                    </Card>
+                </div>
+
+                <!-- Mobile Preview Section - 6 columns -->
+                <div class="md:col-span-6">
+                    <Card class="h-full">
+                        <CardContent class="flex flex-col items-center justify-center h-full">
+                            <div class="mobile-preview">
+                                <div class="mobile-frame">
+                                    <div class="mobile-top">
+                                        <div class="mobile-notch"></div>
+                                    </div>
+                                    <div class="mobile-screen">
+                                       <div v-if="hasPreviewData && isLoading" class="flex flex-col items-center justify-center h-full">
+                                        <div class="text-gray-400 text-center">
+                                            <svg class="animate-spin mx-auto h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                            </svg>
+                                            <p class="mt-2">Loading preview...</p>
+                                        </div>
+                                        </div>
+                                        <iframe v-else-if="hasPreviewData" :src="previewUrl" class="w-full h-full border-none" title="Wedding Invitation Preview" @load="isLoading = false"></iframe>
+                                    </div>
+                                    <div class="mobile-bottom">
+                                        <div class="mobile-home-button"></div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </CardContent>
-                    <CardFooter class="flex justify-between">
-                        <Link :href="route('galeris.index')">
-                            <Button type="button" variant="outline">Batal</Button>
-                        </Link>
-                        <Button type="submit" :disabled="form.processing">Lihat Hasil</Button>
-                    </CardFooter>
-                </form>
-            </Card>
+                        </CardContent>
+                    </Card>
+                </div>
+            </div>
         </div>
     </AppLayout>
 </template>

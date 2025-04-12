@@ -23,6 +23,9 @@ Route::post('/undangans', [UndanganController::class, 'store'])->name('undangans
 Route::get('/undangans/{id}/edit', [UndanganController::class, 'edit'])->name('undangans.edit');
 Route::put('/undangans/{id}', [UndanganController::class, 'update'])->name('undangans.update');
 Route::delete('/undangans/{id}', [UndanganController::class, 'destroy'])->name('undangans.destroy');
+Route::get('/undangans/contents', [UndanganController::class, 'content'])->name('undangans.contents');
+Route::post('/undangans/contents', [UndanganController::class, 'contentStore'])->name('undangans.contents.store');
+Route::get('/undangans/preview/{undangan_id?}/{tema?}', [UndanganController::class, 'preview'])->name('undangans.preview');
 
 // Tamu Routes
 Route::get('/tamus', [TamuController::class, 'index'])->name('tamus.index');
@@ -39,9 +42,6 @@ Route::post('/galeris', [GaleriController::class, 'store'])->name('galeris.store
 Route::get('/galeris/{id}/edit', [GaleriController::class, 'edit'])->name('galeris.edit');
 Route::put('/galeris/{id}', [GaleriController::class, 'update'])->name('galeris.update');
 Route::delete('/galeris/{id}', [GaleriController::class, 'destroy'])->name('galeris.destroy');
-
-// content
-Route::get('/contents', [ContentController::class, 'index'])->name('contents.index');
 
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';

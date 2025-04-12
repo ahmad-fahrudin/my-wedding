@@ -31,7 +31,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Lihat Hasil',
-        href: '/contents',
+        href: '/undangans/contents',
         icon: Folder,
     },
 

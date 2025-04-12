@@ -95,4 +95,34 @@ class UndanganController extends Controller
             return redirect()->route('undangans.index');
         }
     }
+
+    public function content()
+    {
+        $undangans = $this->undanganService->getAllUndangan([]);
+
+        return Inertia::render('Content/Index', [
+            'undangans' => $undangans
+        ]);
+    }
+
+    public function contentStore(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'undangan_id' => 'required|exists:undangans,id',
+                'tema' => 'required|string|in:tema1,tema2',
+            ]);
+            session(['preview_undangan_id' => $validated['undangan_id'], 'preview_tema' => $validated['tema']]);
+
+            return redirect()->back();
+        } catch (Exception $e) {
+            Log::error('Error storing content preferences: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal menampilkan preview undangan');
+        }
+    }
+
+    public function preview($undangan_id = null, $tema = null)
+    {
+        return view('lovelove.index');
+    }
 }
