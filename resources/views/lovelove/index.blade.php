@@ -175,7 +175,7 @@
                                 </div>
                                 <div class="couple-text">
                                     <h3>{{ $undangan->nama_mempelai_1 ?? 'Srivalli Ahuza' }}</h3>
-                                    <p>{{ $undangan->deskripsi_mempelai_1 ?? 'Srivalli adalah wanita yang penuh kasih dan perhatian. Dia memiliki cinta yang tulus dan selalu siap membantu orang lain. Dia adalah sosok yang membuat hidup sekitar terasa lebih berharga.' }}</p>
+                                    <p>{{ $undangan->content->description_mempelai_1 ?? 'Srivalli adalah wanita yang penuh kasih dan perhatian. Dia memiliki cinta yang tulus dan selalu siap membantu orang lain. Dia adalah sosok yang membuat hidup sekitar terasa lebih berharga.' }}</p>
                                     <div class="social">
                                         <ul>
                                             <li><a href="#"><i class="ti-facebook"></i></a></li>
@@ -214,7 +214,7 @@
                                 </div>
                                 <div class="couple-text">
                                     <h3>{{ $undangan->nama_mempelai_2 ?? 'Bhaban Batra' }}</h3>
-                                    <p>{{ $undangan->deskripsi_mempelai_2 ?? 'Bhaban adalah sosok yang tegas dan bijaksana. Dia selalu memberikan dukungan kepada Srivalli dan menginspirasi banyak orang dengan ide dan pandangannya. Cintanya kepada Srivalli adalah bukti sejati dari komitmen dan kesetiaan.' }}</p>
+                                    <p>{{ $undangan->content->description_mempelai_2 ?? 'Bhaban adalah sosok yang tegas dan bijaksana. Dia selalu memberikan dukungan kepada Srivalli dan menginspirasi banyak orang dengan ide dan pandangannya. Cintanya kepada Srivalli adalah bukti sejati dari komitmen dan kesetiaan.' }}</p>
                                     <div class="social">
                                         <ul>
                                             <li><a href="#"><i class="ti-facebook"></i></a></li>
@@ -258,8 +258,8 @@
                         <div class="wpo-story-content  wow fadeInRightSlow" data-wow-duration="1700ms">
                             <div class="wpo-story-content-inner">
                                 <h2>Pertama Kali Kami Bertemu</h2>
-                                <span>12 Feb 2016</span>
-                                <p>Kami pertama kali bertemu di sebuah acara keluarga, di mana kami saling bertukar pandangan dan senyum. Sejak saat itu, kami merasakan chemistry yang kuat dan menemukan kenyamanan dalam satu sama lain.</p>
+                                <span>{{ $undangan->content->tgl_story_1 ? \Carbon\Carbon::parse($undangan->content->tgl_story_1)->format('d M Y') : '12 Feb 2016' }}</span>
+                                <p>{{ $undangan->content->story_1 ?? 'Kami pertama kali bertemu di sebuah acara keluarga, di mana kami saling bertukar pandangan dan senyum. Sejak saat itu, kami merasakan chemistry yang kuat dan menemukan kenyamanan dalam satu sama lain.' }}</p>
                             </div>
                         </div>
                     </div>
@@ -276,8 +276,8 @@
                         <div class="wpo-story-content wow fadeInLeftSlow" data-wow-duration="1700ms">
                             <div class="wpo-story-content-inner">
                                 <h2>Janji Pertama Kami</h2>
-                                <span>23 Apr 2016</span>
-                                <p>Setelah beberapa bulan berkenalan, kami akhirnya pergi berkencan. Momen tersebut sangat berkesan, di mana kami berbagi cerita, tertawa, dan saling mengenal lebih dalam.</p>
+                                <span>{{ $undangan->content->tgl_story_2 ? \Carbon\Carbon::parse($undangan->content->tgl_story_2)->format('d M Y') : '23 Apr 2016' }}</span>
+                                <p>{{ $undangan->content->story_2 ?? 'Setelah beberapa bulan berkenalan, kami akhirnya pergi berkencan. Momen tersebut sangat berkesan, di mana kami berbagi cerita, tertawa, dan saling mengenal lebih dalam.' }}</p>
                             </div>
                         </div>
                     </div>
@@ -294,8 +294,8 @@
                         <div class="wpo-story-content wow fadeInRightSlow" data-wow-duration="1700ms">
                             <div class="wpo-story-content-inner">
                                 <h2>Dia Mengatakan Ya</h2>
-                                <span>10 Mar 2016</span>
-                                <p>Di suatu malam yang indah, saya melamar Srivalli di tempat favorit kami. Dengan penuh haru dan senyum, dia mengatakan "Ya". Momen itu menjadi awal dari perjalanan baru kami bersama.</p>
+                                <span>{{ $undangan->content->tgl_story_3 ? \Carbon\Carbon::parse($undangan->content->tgl_story_3)->format('d M Y') : '10 Mar 2016' }}</span>
+                                <p>{{ $undangan->content->story_3 ?? 'Di suatu malam yang indah, saya melamar Srivalli di tempat favorit kami. Dengan penuh haru dan senyum, dia mengatakan "Ya". Momen itu menjadi awal dari perjalanan baru kami bersama.' }}</p>
                             </div>
                         </div>
                     </div>
