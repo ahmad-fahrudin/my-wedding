@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('galeris', function (Blueprint $table) {
             $table->id();
             $table->foreignId('undangan_id')->constrained()->onDelete('cascade');
+            $table->string('type');
+            $table->string('category');
             $table->longText('image');
             $table->timestamps();
         });

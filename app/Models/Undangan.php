@@ -17,7 +17,7 @@ class Undangan extends Model
         'waktu_acara',
         'tempat',
         'url_maps',
-        'rekening_gift',
+        'rekening',
     ];
 
     public function tamu(): HasMany

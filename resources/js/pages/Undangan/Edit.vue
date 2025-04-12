@@ -38,7 +38,7 @@ const form = useForm({
   waktu_acara: props.undangan.waktu_acara,
   tempat: props.undangan.tempat,
   url_maps: props.undangan.url_maps,
-  rekening_gift: props.undangan.rekening_gift,
+  rekening: props.undangan.rekening,
 });
 
 // Map related variables
@@ -360,15 +360,15 @@ function updateLocationUrl(lat: number, lng: number) {
                 </h3>
 
                 <div class="space-y-2">
-                  <Label for="rekening_gift" class="font-medium">Detail Rekening Hadiah</Label>
+                  <Label for="rekening" class="font-medium">Detail Rekening Hadiah</Label>
                     <input
-                    id="rekening_gift"
-                    v-model="form.rekening_gift"
+                    id="rekening"
+                    v-model="form.rekening"
                     rows="4"
                     class="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-900 text-sm"
                     placeholder="Masukkan nomor rekening"
                     />
-                  <p v-if="form.errors.rekening_gift" class="text-sm text-red-500">{{ form.errors.rekening_gift }}</p>
+                  <p v-if="form.errors.rekening" class="text-sm text-red-500">{{ form.errors.rekening }}</p>
                   <p class="text-xs text-gray-500">Contoh: Bank BCA - 1234567890 - Atas Nama: Budi Santoso</p>
                 </div>
               </div>

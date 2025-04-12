@@ -28,7 +28,7 @@ class UndanganRequest extends FormRequest
             'waktu_acara' => 'required|string',
             'tempat' => 'required|string',
             'url_maps' => 'required|url',
-            'rekening_gift' => 'nullable|string',
+            'rekening' => 'nullable|string',
         ];
     }
 }

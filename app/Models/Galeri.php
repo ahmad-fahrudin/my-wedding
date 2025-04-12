@@ -12,6 +12,8 @@ class Galeri extends Model
 
     protected $fillable = [
         'undangan_id',
+        'type',
+        'category',
         'image',
     ];
 

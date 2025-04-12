@@ -28,11 +28,12 @@ const breadcrumbs: BreadcrumbItem[] = [
 const form = useForm({
   undangan_id: props.tamu.undangan_id,
   nama_tamu: props.tamu.nama_tamu,
+  no_wa: props.tamu.no_wa || '',
 });
 
 // Dropdown related variables
 const isDropdownOpen = ref(false);
-// const searchTerm = ref('');
+const searchTerm = ref('');
 const dropdownRef = ref(null);
 const selectedUndangan = ref(null);
 
@@ -178,6 +179,18 @@ function submit() {
                                 required
                             />
                             <p v-if="form.errors.nama_tamu" class="text-sm text-red-500">{{ form.errors.nama_tamu }}</p>
+                        </div>
+
+                        <div class="space-y-2">
+                            <Label for="no_wa">Nomor WhatsApp</Label>
+                            <Input
+                                id="no_wa"
+                                v-model="form.no_wa"
+                                type="text"
+                                placeholder="Masukkan nomor WhatsApp (opsional)"
+                                :error="form.errors.no_wa"
+                            />
+                            <p v-if="form.errors.no_wa" class="text-sm text-red-500">{{ form.errors.no_wa }}</p>
                         </div>
                     </CardContent>
                     <CardFooter class="flex justify-between">

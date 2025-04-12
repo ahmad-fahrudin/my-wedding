@@ -19,7 +19,7 @@ return new class extends Migration
             $table->time('waktu_acara');
             $table->string('tempat');
             $table->string('url_maps')->nullable();
-            $table->string('rekening_gift')->nullable();
+            $table->string('rekening')->nullable();
             $table->timestamps();
         });
     }

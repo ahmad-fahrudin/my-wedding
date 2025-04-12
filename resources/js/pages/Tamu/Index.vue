@@ -104,6 +104,7 @@ function deleteTamu(id) {
                             <tr>
                                 <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider w-12">No.</th>
                                 <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Nama Tamu</th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">No. WA</th>
                                 <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Undangan</th>
                                 <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider w-24">Actions</th>
                             </tr>
@@ -112,6 +113,7 @@ function deleteTamu(id) {
                             <tr v-for="(item, index) in tamu.data" :key="item.id" class="hover:bg-gray-50 dark:hover:bg-gray-800">
                                 <td class="px-4 py-2 whitespace-nowrap text-sm">{{ tamu.from + index }}</td>
                                 <td class="px-4 py-2 whitespace-nowrap text-sm">{{ item.nama_tamu }}</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm">{{ item.no_wa || '-' }}</td>
                                 <td class="px-4 py-2 whitespace-nowrap text-sm">
                                   {{ item.undangan ? `${item.undangan.nama_mempelai_1} & ${item.undangan.nama_mempelai_2}` : '-' }}
                                 </td>

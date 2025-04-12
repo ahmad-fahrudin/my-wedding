@@ -112,6 +112,8 @@ class UndanganController extends Controller
                 'undangan_id' => 'required|exists:undangans,id',
                 'tema' => 'required|string|in:tema1,tema2',
             ]);
+
+            // Set preview data in session
             session(['preview_undangan_id' => $validated['undangan_id'], 'preview_tema' => $validated['tema']]);
 
             return redirect()->back();
@@ -123,6 +125,36 @@ class UndanganController extends Controller
 
     public function preview($undangan_id = null, $tema = null)
     {
-        return view('lovelove.index');
+        try {
+            // Use either the URL parameters or the session values
+            $undangan_id = $undangan_id ?? session('preview_undangan_id');
+            $tema = $tema ?? session('preview_tema', 'tema1');
+
+            $undangan = null;
+            $galeri = [];
+            $ucapan = [];
+
+            if ($undangan_id) {
+                // Get undangan data with relations
+                $undangan = Undangan::with(['galeri', 'ucapan' => function ($query) {
+                    $query->orderBy('created_at', 'desc')->limit(5);
+                }])->find($undangan_id);
+
+                if ($undangan) {
+                    $galeri = $undangan->galeri;
+                    $ucapan = $undangan->ucapan;
+                }
+            }
+
+            return view('lovelove.index', compact('undangan', 'galeri', 'ucapan', 'tema'));
+        } catch (Exception $e) {
+            Log::error('Error displaying preview: ' . $e->getMessage());
+            return view('lovelove.index', [
+                'undangan' => null,
+                'galeri' => [],
+                'ucapan' => [],
+                'tema' => 'tema1'
+            ]);
+        }
     }
 }

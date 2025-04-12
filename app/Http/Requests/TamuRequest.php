@@ -24,6 +24,7 @@ class TamuRequest extends FormRequest
         return [
             'undangan_id' => 'required|exists:undangans,id',
             'nama_tamu' => 'required|string|max:255',
+            'no_wa' => 'required|string|max:15',
         ];
     }
 }
