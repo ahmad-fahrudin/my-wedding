@@ -22,6 +22,7 @@ class UndanganRequest extends FormRequest
     public function rules(): array
     {
         return [
+            // Undangan fields
             'nama_mempelai_1' => 'required|string|max:255',
             'nama_mempelai_2' => 'required|string|max:255',
             'tanggal_acara' => 'required|date',
@@ -29,6 +30,16 @@ class UndanganRequest extends FormRequest
             'tempat' => 'required|string',
             'url_maps' => 'required|url',
             'rekening' => 'nullable|string',
+
+            // UndanganContent fields
+            'description_mempelai_1' => 'nullable|string',
+            'description_mempelai_2' => 'nullable|string',
+            'story_1' => 'nullable|string',
+            'story_2' => 'nullable|string',
+            'story_3' => 'nullable|string',
+            'tgl_story_1' => 'nullable|date',
+            'tgl_story_2' => 'nullable|date',
+            'tgl_story_3' => 'nullable|date',
         ];
     }
 }

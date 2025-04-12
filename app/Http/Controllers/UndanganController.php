@@ -49,12 +49,36 @@ class UndanganController extends Controller
     {
         try {
             $validated = $request->validated();
-            $this->undanganService->createUndangan($validated);
+
+            // Separate data for Undangan
+            $undanganData = [
+                'nama_mempelai_1' => $validated['nama_mempelai_1'],
+                'nama_mempelai_2' => $validated['nama_mempelai_2'],
+                'tanggal_acara' => $validated['tanggal_acara'],
+                'waktu_acara' => $validated['waktu_acara'],
+                'tempat' => $validated['tempat'],
+                'url_maps' => $validated['url_maps'],
+                'rekening' => $validated['rekening'] ?? null,
+            ];
+
+            // Separate data for UndanganContent
+            $contentData = array_filter([
+                'description_mempelai_1' => $validated['description_mempelai_1'] ?? null,
+                'description_mempelai_2' => $validated['description_mempelai_2'] ?? null,
+                'story_1' => $validated['story_1'] ?? null,
+                'story_2' => $validated['story_2'] ?? null,
+                'story_3' => $validated['story_3'] ?? null,
+                'tgl_story_1' => $validated['tgl_story_1'] ?? null,
+                'tgl_story_2' => $validated['tgl_story_2'] ?? null,
+                'tgl_story_3' => $validated['tgl_story_3'] ?? null,
+            ]);
+
+            $this->undanganService->createUndanganWithContent($undanganData, $contentData);
 
             return redirect()->route('undangans.index')->with('success', 'Undangan created successfully');
         } catch (Exception $e) {
             Log::error('Error creating undangan: ' . $e->getMessage());
-            return redirect()->back();
+            return redirect()->back()->with('error', 'Failed to create undangan');
         }
     }
 
@@ -75,12 +99,36 @@ class UndanganController extends Controller
     {
         try {
             $validated = $request->validated();
-            $this->undanganService->updateUndangan($id, $validated);
 
-            return redirect()->route('undangans.index');
+            // Separate data for Undangan
+            $undanganData = [
+                'nama_mempelai_1' => $validated['nama_mempelai_1'],
+                'nama_mempelai_2' => $validated['nama_mempelai_2'],
+                'tanggal_acara' => $validated['tanggal_acara'],
+                'waktu_acara' => $validated['waktu_acara'],
+                'tempat' => $validated['tempat'],
+                'url_maps' => $validated['url_maps'],
+                'rekening' => $validated['rekening'] ?? null,
+            ];
+
+            // Separate data for UndanganContent
+            $contentData = array_filter([
+                'description_mempelai_1' => $validated['description_mempelai_1'] ?? null,
+                'description_mempelai_2' => $validated['description_mempelai_2'] ?? null,
+                'story_1' => $validated['story_1'] ?? null,
+                'story_2' => $validated['story_2'] ?? null,
+                'story_3' => $validated['story_3'] ?? null,
+                'tgl_story_1' => $validated['tgl_story_1'] ?? null,
+                'tgl_story_2' => $validated['tgl_story_2'] ?? null,
+                'tgl_story_3' => $validated['tgl_story_3'] ?? null,
+            ]);
+
+            $this->undanganService->updateUndanganWithContent($id, $undanganData, $contentData);
+
+            return redirect()->route('undangans.index')->with('success', 'Undangan updated successfully');
         } catch (Exception $e) {
             Log::error('Error updating undangan: ' . $e->getMessage());
-            return redirect()->back();
+            return redirect()->back()->with('error', 'Failed to update undangan');
         }
     }
 
@@ -158,6 +206,81 @@ class UndanganController extends Controller
                 'ucapan' => [],
                 'tema' => 'tema1'
             ]);
+        }
+    }
+
+    public function storeUcapan(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'undangan_id' => 'required|exists:undangans,id',
+                'nama' => 'required|string|max:100',
+                'kehadiran' => 'required|string|in:hadir,tidak_hadir',
+                'ucapan' => 'required|string',
+            ]);
+
+            $this->undanganService->saveUcapan($validated);
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => true, 'message' => 'Terima kasih atas ucapan dan doanya']);
+            }
+
+            return redirect()->back()->with('success', 'Terima kasih atas ucapan dan doanya');
+        } catch (Exception $e) {
+            Log::error('Error storing ucapan: ' . $e->getMessage());
+
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'Terjadi kesalahan saat mengirim ucapan'], 500);
+            }
+
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat mengirim ucapan');
+        }
+    }
+
+    /**
+     * Get ucapan for a specific undangan
+     */
+    public function ucapan($undangan_id)
+    {
+        try {
+            $ucapan = $this->undanganService->getUcapanByUndanganId($undangan_id);
+            return response()->json(['success' => true, 'data' => $ucapan]);
+        } catch (Exception $e) {
+            Log::error('Error fetching ucapan: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Gagal mengambil data ucapan'], 500);
+        }
+    }
+
+    /**
+     * Display admin page for managing ucapan
+     */
+    public function adminUcapan(Request $request)
+    {
+        try {
+            $filters = $request->only('search', 'undangan_id');
+            $ucapan = $this->undanganService->getAllUcapan($filters);
+
+            return Inertia::render('Ucapan/Index', [
+                'ucapan' => $ucapan,
+                'filters' => $filters,
+            ]);
+        } catch (Exception $e) {
+            Log::error('Error fetching ucapan list: ' . $e->getMessage());
+            return redirect()->back();
+        }
+    }
+
+    /**
+     * Delete an ucapan
+     */
+    public function deleteUcapan($id)
+    {
+        try {
+            $this->undanganService->deleteUcapan($id);
+            return redirect()->back()->with('success', 'Ucapan berhasil dihapus');
+        } catch (Exception $e) {
+            Log::error('Error deleting ucapan: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal menghapus ucapan');
         }
     }
 }

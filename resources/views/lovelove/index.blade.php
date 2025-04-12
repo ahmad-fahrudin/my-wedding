@@ -453,14 +453,9 @@
                                 <div class="wpo-section-title">
                                     <h4>Ucapan & Doa</h4>
                                 </div>
-                                <form method="post" class="contact-validation-active" id="contact-form-main" action="">
-                                    @csrf
-                                    <input type="hidden" name="undangan_id" value="{{ $undangan->id ?? 1 }}">
-                                    <div>
-                                        <input type="text" class="form-control" name="nama" id="nama" placeholder="Nama Anda" required>
-                                    </div>
-                                    <div class="attendance-radio" style="margin-bottom: 20px; margin-top: 10px;">
-                                        <label style="display: block; margin-bottom: 8px; color: #666; font-size: 15px;">Konfirmasi Kehadiran:</label>
+                                <form method="post" class="contact-validation-active" action="{{ route('ucapan.store') }}" novalidate="novalidate"> @csrf <input type="hidden" name="undangan_id" value="{{ $undangan->id ?? 1 }}">
+                                    <div> <input type="text" class="form-control" name="nama" id="nama" placeholder="Nama Anda" required> </div>
+                                    <div class="attendance-radio" style="margin-bottom: 20px; margin-top: 10px;"> <label style="display: block; margin-bottom: 8px; color: #666; font-size: 15px;">Konfirmasi Kehadiran:</label>
                                         <div style="display: flex; gap: 30px;">
                                             <label class="radio-container" style="position: relative; padding-left: 30px; cursor: pointer; display: flex; align-items: center; font-size: 15px; user-select: none; color: #666; margin: 0;">
                                                 <input type="radio" name="kehadiran" value="hadir" required style="position: absolute; opacity: 0; cursor: pointer; height: 0; width: 0;">
@@ -474,21 +469,15 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <div>
-                                        <textarea class="form-control" name="ucapan" id="ucapan" placeholder="Tuliskan ucapan dan doa untuk kedua mempelai" rows="4" required></textarea>
-                                    </div>
-                                    <div class="submit-area">
-                                        <button type="submit" class="theme-btn">Kirim Ucapan</button>
-                                        <div id="c-loader">
-                                            <i class="ti-reload"></i>
-                                        </div>
+                                    <div> <textarea class="form-control" name="ucapan" id="ucapan" placeholder="Tuliskan ucapan dan doa untuk kedua mempelai" rows="4" required></textarea> </div>
+                                    <div class="submit-area"> <button type="submit" class="theme-btn">Kirim Ucapan</button>
+                                        <div id="c-loader"> <i class="ti-reload"></i> </div>
                                     </div>
                                     <div class="clearfix error-handling-messages">
                                         <div id="success">Terima kasih atas ucapan dan doanya</div>
                                         <div id="error">Terjadi kesalahan saat mengirim ucapan. Silakan coba lagi nanti.</div>
                                     </div>
                                 </form>
-
                                 <style>
                                     /* Custom radio button styling */
                                     .radio-container:hover .radio-checkmark {
@@ -610,6 +599,8 @@
             </div>
         </div>
     </section>
+
+
 
 
     <!-- wpo-site-footer start -->

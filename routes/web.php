@@ -43,5 +43,12 @@ Route::get('/galeris/{id}/edit', [GaleriController::class, 'edit'])->name('galer
 Route::put('/galeris/{id}', [GaleriController::class, 'update'])->name('galeris.update');
 Route::delete('/galeris/{id}', [GaleriController::class, 'destroy'])->name('galeris.destroy');
 
+Route::post('/ucapan', [UndanganController::class, 'storeUcapan'])->name('ucapan.store');
+Route::get('/ucapan/{undangan_id}', [UndanganController::class, 'ucapan'])->name('ucapan.show');
+
+Route::get('/ucapan', [UndanganController::class, 'adminUcapan'])->name('admin.ucapan.index');
+Route::delete('/ucapan/{id}', [UndanganController::class, 'deleteUcapan'])->name('admin.ucapan.destroy');
+
+
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';

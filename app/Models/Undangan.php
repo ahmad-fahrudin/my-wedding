@@ -34,4 +34,9 @@ class Undangan extends Model
     {
         return $this->hasMany(Ucapan::class);
     }
+
+    public function content()
+    {
+        return $this->hasOne(UndanganContent::class);
+    }
 }

@@ -7,7 +7,7 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { type BreadcrumbItem } from '@/types';
 import { Head, useForm, Link } from '@inertiajs/vue3';
 import Swal from 'sweetalert2';
-import { CalendarIcon, MapPinIcon, ClockIcon, UsersIcon, CreditCardIcon } from 'lucide-vue-next';
+import { CalendarIcon, MapPinIcon, ClockIcon, UsersIcon, CreditCardIcon, BookOpenIcon, HeartIcon } from 'lucide-vue-next';
 import { ref, onMounted } from 'vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -22,6 +22,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 const form = useForm({
+  // Undangan fields
   nama_mempelai_1: '',
   nama_mempelai_2: '',
   tanggal_acara: '',
@@ -29,6 +30,16 @@ const form = useForm({
   tempat: '',
   url_maps: '',
   rekening: '',
+
+  // UndanganContent fields
+  description_mempelai_1: '',
+  description_mempelai_2: '',
+  story_1: '',
+  story_2: '',
+  story_3: '',
+  tgl_story_1: '',
+  tgl_story_2: '',
+  tgl_story_3: '',
 });
 
 // Map related variables
@@ -63,6 +74,7 @@ function submit() {
   });
 }
 
+// Initialize OpenStreetMap
 // Initialize OpenStreetMap
 onMounted(() => {
   // Load Leaflet CSS
@@ -268,6 +280,131 @@ function updateLocationUrl(lat: number, lng: number) {
                     />
                   </div>
                   <p v-if="form.errors.waktu_acara" class="text-sm text-red-500">{{ form.errors.waktu_acara }}</p>
+                </div>
+              </div>
+
+              <!-- Couple Descriptions -->
+              <div class="space-y-4 md:col-span-2">
+                <h3 class="text-md font-medium flex items-center gap-2">
+                  <BookOpenIcon class="h-4 w-4" />
+                  Deskripsi Mempelai
+                </h3>
+
+                <div class="grid gap-4 md:grid-cols-2">
+                  <div class="space-y-2">
+                    <Label for="description_mempelai_1" class="font-medium">Deskripsi Pengantin Pria</Label>
+                    <textarea
+                      id="description_mempelai_1"
+                      v-model="form.description_mempelai_1"
+                      rows="4"
+                      class="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-900 text-sm"
+                      placeholder="Masukkan deskripsi singkat tentang pengantin pria..."
+                    ></textarea>
+                    <p v-if="form.errors.description_mempelai_1" class="text-sm text-red-500">{{ form.errors.description_mempelai_1 }}</p>
+                  </div>
+
+                  <div class="space-y-2">
+                    <Label for="description_mempelai_2" class="font-medium">Deskripsi Pengantin Wanita</Label>
+                    <textarea
+                      id="description_mempelai_2"
+                      v-model="form.description_mempelai_2"
+                      rows="4"
+                      class="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-900 text-sm"
+                      placeholder="Masukkan deskripsi singkat tentang pengantin wanita..."
+                    ></textarea>
+                    <p v-if="form.errors.description_mempelai_2" class="text-sm text-red-500">{{ form.errors.description_mempelai_2 }}</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Love Story -->
+              <div class="space-y-4 md:col-span-2">
+                <h3 class="text-md font-medium flex items-center gap-2">
+                  <HeartIcon class="h-4 w-4" />
+                  Kisah Cinta
+                </h3>
+
+                <div class="space-y-4">
+                  <!-- Story 1 -->
+                  <div class="space-y-2 border border-gray-200 dark:border-gray-700 rounded-md p-4">
+                    <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
+                      <div class="w-full md:w-1/4">
+                        <Label for="tgl_story_1" class="font-medium">Tanggal Cerita 1</Label>
+                        <Input
+                          id="tgl_story_1"
+                          v-model="form.tgl_story_1"
+                          type="date"
+                          class="bg-white dark:bg-gray-900 mt-1"
+                        />
+                        <p v-if="form.errors.tgl_story_1" class="text-sm text-red-500">{{ form.errors.tgl_story_1 }}</p>
+                      </div>
+                      <div class="w-full md:w-3/4">
+                        <Label for="story_1" class="font-medium">Cerita 1</Label>
+                        <textarea
+                          id="story_1"
+                          v-model="form.story_1"
+                          rows="3"
+                          class="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-900 text-sm mt-1"
+                          placeholder="Bagaimana awal mula pertemuan..."
+                        ></textarea>
+                        <p v-if="form.errors.story_1" class="text-sm text-red-500">{{ form.errors.story_1 }}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Story 2 -->
+                  <div class="space-y-2 border border-gray-200 dark:border-gray-700 rounded-md p-4">
+                    <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
+                      <div class="w-full md:w-1/4">
+                        <Label for="tgl_story_2" class="font-medium">Tanggal Cerita 2</Label>
+                        <Input
+                          id="tgl_story_2"
+                          v-model="form.tgl_story_2"
+                          type="date"
+                          class="bg-white dark:bg-gray-900 mt-1"
+                        />
+                        <p v-if="form.errors.tgl_story_2" class="text-sm text-red-500">{{ form.errors.tgl_story_2 }}</p>
+                      </div>
+                      <div class="w-full md:w-3/4">
+                        <Label for="story_2" class="font-medium">Cerita 2</Label>
+                        <textarea
+                          id="story_2"
+                          v-model="form.story_2"
+                          rows="3"
+                          class="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-900 text-sm mt-1"
+                          placeholder="Cerita perjalanan hubungan..."
+                        ></textarea>
+                        <p v-if="form.errors.story_2" class="text-sm text-red-500">{{ form.errors.story_2 }}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Story 3 -->
+                  <div class="space-y-2 border border-gray-200 dark:border-gray-700 rounded-md p-4">
+                    <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
+                      <div class="w-full md:w-1/4">
+                        <Label for="tgl_story_3" class="font-medium">Tanggal Cerita 3</Label>
+                        <Input
+                          id="tgl_story_3"
+                          v-model="form.tgl_story_3"
+                          type="date"
+                          class="bg-white dark:bg-gray-900 mt-1"
+                        />
+                        <p v-if="form.errors.tgl_story_3" class="text-sm text-red-500">{{ form.errors.tgl_story_3 }}</p>
+                      </div>
+                      <div class="w-full md:w-3/4">
+                        <Label for="story_3" class="font-medium">Cerita 3</Label>
+                        <textarea
+                          id="story_3"
+                          v-model="form.story_3"
+                          rows="3"
+                          class="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-900 text-sm mt-1"
+                          placeholder="Cerita menuju pernikahan..."
+                        ></textarea>
+                        <p v-if="form.errors.story_3" class="text-sm text-red-500">{{ form.errors.story_3 }}</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
