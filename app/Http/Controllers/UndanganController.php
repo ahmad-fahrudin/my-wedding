@@ -133,9 +133,15 @@ class UndanganController extends Controller
 
             if ($undangan_id) {
                 // Get undangan data with relations
-                $undangan = Undangan::with(['galeri', 'ucapan' => function ($query) {
-                    $query->orderBy('created_at', 'desc')->limit(5);
-                }])->find($undangan_id);
+                $undangan = Undangan::with([
+                    'galeri' => function ($query) {
+                        // Ensure we're ordering galeri by category for better grouping
+                        $query->orderBy('category', 'asc');
+                    },
+                    'ucapan' => function ($query) {
+                        $query->orderBy('created_at', 'desc')->limit(5);
+                    }
+                ])->find($undangan_id);
 
                 if ($undangan) {
                     $galeri = $undangan->galeri;

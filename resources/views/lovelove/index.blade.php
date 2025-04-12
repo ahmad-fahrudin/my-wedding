@@ -123,7 +123,21 @@
                                 <div class="static-hero-right">
                                     <div class="static-hero-img">
                                         <div class="static-hero-img-inner wow zoomIn" data-wow-duration="1500ms">
-                                            <img src="{{ asset('lovelove/images/slider/couple.png') }}" alt="">
+                                            @php
+                                            $heroImage = null;
+                                            if(isset($galeri) && count($galeri) > 0) {
+                                            $heroImages = $galeri->where('category', App\Enums\GaleriCategoryEnum::HERO->value);
+                                            if($heroImages->count() > 0) {
+                                            $heroImage = $heroImages->first()->image;
+                                            }
+                                            }
+                                            @endphp
+
+                                            @if($heroImage)
+                                            <img src="{{ strpos($heroImage, 'data:image') === 0 ? $heroImage : 'data:image/jpeg;base64,' . $heroImage }}" alt="Hero image">
+                                            @else
+                                            <img src="{{ asset('lovelove/images/slider/couple.png') }}" alt="Default hero image">
+                                            @endif
                                         </div>
                                     </div>
                                     <div class="static-hero-shape"><img src="{{ asset('lovelove/images/slider/frame.png') }}" alt=""></div>
@@ -143,11 +157,25 @@
                         <div class="col col-md-4 col-12">
                             <div class="couple-item wow fadeInLeftSlow" data-wow-duration="1700ms">
                                 <div class="couple-img">
-                                    <img src="{{ asset('lovelove/images/couple/img-3.jpg') }}" alt="">
+                                    @php
+                                    $bride = null;
+                                    if(isset($galeri) && count($galeri) > 0) {
+                                    $coupleImages = $galeri->where('category', App\Enums\GaleriCategoryEnum::COUPLE->value);
+                                    if($coupleImages->count() > 0) {
+                                    $bride = $coupleImages->first()->image;
+                                    }
+                                    }
+                                    @endphp
+
+                                    @if($bride)
+                                    <img src="{{ strpos($bride, 'data:image') === 0 ? $bride : 'data:image/jpeg;base64,' . $bride }}" alt="Bride image">
+                                    @else
+                                    <img src="{{ asset('lovelove/images/couple/img-3.jpg') }}" alt="Default bride image">
+                                    @endif
                                 </div>
                                 <div class="couple-text">
-                                    <h3>Srivalli Ahuza</h3>
-                                    <p>Srivalli adalah wanita yang penuh kasih dan perhatian. Dia memiliki cinta yang tulus dan selalu siap membantu orang lain. Dia adalah sosok yang membuat hidup sekitar terasa lebih berharga.</p>
+                                    <h3>{{ $undangan->nama_mempelai_1 ?? 'Srivalli Ahuza' }}</h3>
+                                    <p>{{ $undangan->deskripsi_mempelai_1 ?? 'Srivalli adalah wanita yang penuh kasih dan perhatian. Dia memiliki cinta yang tulus dan selalu siap membantu orang lain. Dia adalah sosok yang membuat hidup sekitar terasa lebih berharga.' }}</p>
                                     <div class="social">
                                         <ul>
                                             <li><a href="#"><i class="ti-facebook"></i></a></li>
@@ -168,11 +196,25 @@
                         <div class="col col-md-4 col-12">
                             <div class="couple-item wow fadeInRightSlow" data-wow-duration="1700ms">
                                 <div class="couple-img">
-                                    <img src="{{ asset('lovelove/images/couple/img-4.jpg') }}" alt="">
+                                    @php
+                                    $groom = null;
+                                    if(isset($galeri) && count($galeri) > 0) {
+                                    $coupleImages = $galeri->where('category', App\Enums\GaleriCategoryEnum::COUPLE->value);
+                                    if($coupleImages->count() > 1) {
+                                    $groom = $coupleImages->skip(1)->first()->image;
+                                    }
+                                    }
+                                    @endphp
+
+                                    @if($groom)
+                                    <img src="{{ strpos($groom, 'data:image') === 0 ? $groom : 'data:image/jpeg;base64,' . $groom }}" alt="Groom image">
+                                    @else
+                                    <img src="{{ asset('lovelove/images/couple/img-4.jpg') }}" alt="Default groom image">
+                                    @endif
                                 </div>
                                 <div class="couple-text">
-                                    <h3>Bhaban Batra</h3>
-                                    <p>Bhaban adalah sosok yang tegas dan bijaksana. Dia selalu memberikan dukungan kepada Srivalli dan menginspirasi banyak orang dengan ide dan pandangannya. Cintanya kepada Srivalli adalah bukti sejati dari komitmen dan kesetiaan.</p>
+                                    <h3>{{ $undangan->nama_mempelai_2 ?? 'Bhaban Batra' }}</h3>
+                                    <p>{{ $undangan->deskripsi_mempelai_2 ?? 'Bhaban adalah sosok yang tegas dan bijaksana. Dia selalu memberikan dukungan kepada Srivalli dan menginspirasi banyak orang dengan ide dan pandangannya. Cintanya kepada Srivalli adalah bukti sejati dari komitmen dan kesetiaan.' }}</p>
                                     <div class="social">
                                         <ul>
                                             <li><a href="#"><i class="ti-facebook"></i></a></li>
@@ -196,10 +238,21 @@
                     <h2>Kisah Cinta Kami yang Manis</h2>
                 </div>
                 <div class="wpo-story-wrap">
+                    @php
+                    $storyImages = [];
+                    if(isset($galeri) && count($galeri) > 0) {
+                    $storyImages = $galeri->where('category', App\Enums\GaleriCategoryEnum::STORY->value)->take(3)->values();
+                    }
+                    @endphp
+
                     <div class="wpo-story-item">
                         <div class="wpo-story-img-wrap wow fadeInLeftSlow" data-wow-duration="1700ms">
                             <div class="wpo-story-img">
-                                <img src="{{ asset('lovelove/images/story/5.jpg') }}" alt="">
+                                @if(isset($storyImages[0]))
+                                <img src="{{ strpos($storyImages[0]->image, 'data:image') === 0 ? $storyImages[0]->image : 'data:image/jpeg;base64,' . $storyImages[0]->image }}" alt="Story image 1">
+                                @else
+                                <img src="{{ asset('lovelove/images/story/5.jpg') }}" alt="Default story image 1">
+                                @endif
                             </div>
                         </div>
                         <div class="wpo-story-content  wow fadeInRightSlow" data-wow-duration="1700ms">
@@ -213,7 +266,11 @@
                     <div class="wpo-story-item">
                         <div class="wpo-story-img-wrap wow fadeInRightSlow" data-wow-duration="1700ms">
                             <div class="wpo-story-img">
-                                <img src="{{ asset('lovelove/images/story/6.jpg') }}" alt="">
+                                @if(isset($storyImages[1]))
+                                <img src="{{ strpos($storyImages[1]->image, 'data:image') === 0 ? $storyImages[1]->image : 'data:image/jpeg;base64,' . $storyImages[1]->image }}" alt="Story image 2">
+                                @else
+                                <img src="{{ asset('lovelove/images/story/6.jpg') }}" alt="Default story image 2">
+                                @endif
                             </div>
                         </div>
                         <div class="wpo-story-content wow fadeInLeftSlow" data-wow-duration="1700ms">
@@ -227,7 +284,11 @@
                     <div class="wpo-story-item">
                         <div class="wpo-story-img-wrap wow fadeInLeftSlow" data-wow-duration="1700ms">
                             <div class="wpo-story-img">
-                                <img src="{{ asset('lovelove/images/story/7.jpg') }}" alt="">
+                                @if(isset($storyImages[2]))
+                                <img src="{{ strpos($storyImages[2]->image, 'data:image') === 0 ? $storyImages[2]->image : 'data:image/jpeg;base64,' . $storyImages[2]->image }}" alt="Story image 3">
+                                @else
+                                <img src="{{ asset('lovelove/images/story/7.jpg') }}" alt="Default story image 3">
+                                @endif
                             </div>
                         </div>
                         <div class="wpo-story-content wow fadeInRightSlow" data-wow-duration="1700ms">
@@ -260,15 +321,19 @@
                                 'lovelove/images/portfolio/17.jpg',
                                 ];
 
+                                $galleryImages = [];
                                 $imageCount = 0;
+                                if(isset($galeri) && count($galeri) > 0) {
+                                $galleryImages = $galeri->where('category', App\Enums\GaleriCategoryEnum::GALLERY->value);
+                                $imageCount = $galleryImages->count();
+                                }
                                 @endphp
 
-                                @if(isset($galeri) && count($galeri) > 0)
-                                @foreach($galeri as $img)
+                                @if($imageCount > 0)
+                                @foreach($galleryImages as $img)
                                 <div class="grid">
                                     <div class="img-holder">
                                         @php
-                                        $imageCount++;
                                         $imageSrc = strpos($img->image, 'data:image') === 0
                                         ? $img->image
                                         : 'data:image/jpeg;base64,' . $img->image;
@@ -282,15 +347,6 @@
                                     </div>
                                 </div>
                                 @endforeach
-                                @else
-                                <!-- Debug output -->
-                                <div style="display: none;">
-                                    @if(isset($galeri))
-                                    Gallery object exists but has {{ count($galeri) }} items.
-                                    @else
-                                    Gallery object is not set.
-                                    @endif
-                                </div>
                                 @endif
 
                                 <!-- Add default images if needed -->
