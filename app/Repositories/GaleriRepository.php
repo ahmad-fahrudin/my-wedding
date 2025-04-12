@@ -21,12 +21,39 @@ class GaleriRepository
             });
         }
 
+        if (isset($filters['undangan_id'])) {
+            $query->where('undangan_id', $filters['undangan_id']);
+        }
+
+        if (isset($filters['type'])) {
+            $query->where('type', $filters['type']);
+        }
+
+        if (isset($filters['category'])) {
+            $query->where('category', $filters['category']);
+        }
+
         return $query->orderBy('created_at', 'desc')->paginate(10);
     }
 
     public function getById($id)
     {
         return Galeri::with('undangan')->findOrFail($id);
+    }
+
+    public function getByUndanganAndFilters($undanganId, array $filters = [])
+    {
+        $query = Galeri::where('undangan_id', $undanganId);
+
+        if (isset($filters['type'])) {
+            $query->where('type', $filters['type']);
+        }
+
+        if (isset($filters['category'])) {
+            $query->where('category', $filters['category']);
+        }
+
+        return $query->get();
     }
 
     public function create(array $data)
@@ -39,6 +66,8 @@ class GaleriRepository
 
         $id = DB::table('galeris')->insertGetId([
             'undangan_id' => $data['undangan_id'],
+            'type' => $data['type'] ?? null,
+            'category' => $data['category'] ?? null,
             'image' => $imageBase64,
             'created_at' => now(),
             'updated_at' => now(),
@@ -56,6 +85,14 @@ class GaleriRepository
 
         if (isset($data['undangan_id'])) {
             $updateData['undangan_id'] = $data['undangan_id'];
+        }
+
+        if (isset($data['type'])) {
+            $updateData['type'] = $data['type'];
+        }
+
+        if (isset($data['category'])) {
+            $updateData['category'] = $data['category'];
         }
 
         // Handle image if provided

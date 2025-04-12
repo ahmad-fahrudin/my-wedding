@@ -25,7 +25,7 @@ const toggleDropdown = (title: string) => {
           @click="toggleDropdown(item.title)"
           class="w-full flex items-center justify-between"
         >
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-4">
             <component :is="item.icon" class="h-4 w-4" />
             <span>{{ item.title }}</span>
           </div>
@@ -42,7 +42,7 @@ const toggleDropdown = (title: string) => {
         >
           <SidebarMenuItem v-for="child in item.children" :key="child.title" :value="child.title">
             <SidebarMenuButton asChild size="sm">
-              <Link :href="child.href" class="flex items-center gap-2">
+              <Link :href="child.href" class="flex items-center gap-4">
                 <component :is="child.icon" class="h-4 w-4" />
                 <span>{{ child.title }}</span>
               </Link>
@@ -54,7 +54,7 @@ const toggleDropdown = (title: string) => {
       <!-- Regular menu items without dropdown -->
       <template v-else>
         <SidebarMenuButton asChild>
-          <Link :href="item.href" class="flex items-center gap-2">
+          <Link :href="item.href" class="flex items-center gap-4">
             <component :is="item.icon" class="h-4 w-4" />
             <span>{{ item.title }}</span>
           </Link>

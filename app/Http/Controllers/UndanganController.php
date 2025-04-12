@@ -113,9 +113,6 @@ class UndanganController extends Controller
                 'tema' => 'required|string|in:tema1,tema2',
             ]);
 
-            // Set preview data in session
-            session(['preview_undangan_id' => $validated['undangan_id'], 'preview_tema' => $validated['tema']]);
-
             return redirect()->back();
         } catch (Exception $e) {
             Log::error('Error storing content preferences: ' . $e->getMessage());

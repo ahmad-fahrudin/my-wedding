@@ -3,14 +3,17 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { Button } from '@/components/ui/button';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, router } from '@inertiajs/vue3';
-import { PlusIcon, PencilIcon, TrashIcon, SearchIcon } from 'lucide-vue-next';
+import { PlusIcon, PencilIcon, TrashIcon, SearchIcon, FilterIcon } from 'lucide-vue-next';
 import Swal from 'sweetalert2';
 import { ref, watch } from 'vue';
 import debounce from 'lodash/debounce';
 
 const props = defineProps({
   galeris: Object,
-  filters: Object
+  filters: Object,
+  types: Array,
+  categories: Array,
+  undangans: Object
 });
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -20,19 +23,48 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-// Search functionality
+// Search and filter functionality
 const search = ref(props.filters?.search || '');
+const selectedType = ref(props.filters?.type || '');
+const selectedCategory = ref(props.filters?.category || '');
 
 // Use debounce to avoid too many requests while typing
 const debouncedSearch = debounce(() => {
-  router.get(route('galeris.index'), { search: search.value }, {
+  applyFilters();
+}, 500);
+
+watch(search, debouncedSearch);
+
+// Apply filters immediately when dropdowns change
+watch(selectedType, applyFilters);
+watch(selectedCategory, applyFilters);
+
+function applyFilters() {
+  const filters = {
+    search: search.value,
+    type: selectedType.value,
+    category: selectedCategory.value,
+  };
+
+  // Remove empty filters
+  Object.keys(filters).forEach(key => {
+    if (!filters[key]) delete filters[key];
+  });
+
+  // Use router.get to apply the filters
+  router.get(route('galeris.index'), filters, {
     preserveState: true,
     preserveScroll: true,
     replace: true
   });
-}, 500);
+}
 
-watch(search, debouncedSearch);
+function clearFilters() {
+  search.value = '';
+  selectedType.value = '';
+  selectedCategory.value = '';
+  applyFilters();
+}
 
 function deleteGaleri(id) {
   Swal.fire({
@@ -64,6 +96,17 @@ function deleteGaleri(id) {
     }
   });
 }
+
+// Helper to get the label from value
+function getTypeLabel(value) {
+  const type = props.types?.find(t => t.value === value);
+  return type ? type.label : value;
+}
+
+function getCategoryLabel(value) {
+  const category = props.categories?.find(c => c.value === value);
+  return category ? category.label : value;
+}
 </script>
 
 <template>
@@ -83,17 +126,57 @@ function deleteGaleri(id) {
 
             <div class="rounded-xl border border-sidebar-border/70 dark:border-sidebar-border overflow-hidden">
                 <div class="bg-gray-50 dark:bg-gray-800 px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                    <div class="flex flex-wrap items-center justify-end gap-4">
-                        <div class="relative w-full md:w-auto md:min-w-[300px]">
-                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                <SearchIcon class="h-4 w-4 text-gray-400" />
+                    <div class="flex flex-wrap items-center justify-between gap-4">
+                        <div class="flex items-center">
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                @click="clearFilters"
+                                class="mr-2"
+                                :disabled="!search && !selectedType && !selectedCategory"
+                            >
+                                Clear Filters
+                            </Button>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-4">
+                            <!-- Type Filter -->
+                            <div class="w-full md:w-auto">
+                                <select
+                                    v-model="selectedType"
+                                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-900 text-sm"
+                                >
+                                    <option value="">All Types</option>
+                                    <option v-for="type in types" :key="type.value" :value="type.value">
+                                        {{ type.label }}
+                                    </option>
+                                </select>
                             </div>
-                            <input
-                                v-model="search"
-                                type="text"
-                                class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-900 text-sm"
-                                placeholder="Cari undangan..."
-                            />
+
+                            <!-- Category Filter -->
+                            <div class="w-full md:w-auto">
+                                <select
+                                    v-model="selectedCategory"
+                                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-900 text-sm"
+                                >
+                                    <option value="">All Categories</option>
+                                    <option v-for="category in categories" :key="category.value" :value="category.value">
+                                        {{ category.label }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <!-- Search Box -->
+                            <div class="relative w-full md:w-auto md:min-w-[300px]">
+                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                    <SearchIcon class="h-4 w-4 text-gray-400" />
+                                </div>
+                                <input
+                                    v-model="search"
+                                    type="text"
+                                    class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-900 text-sm"
+                                    placeholder="Cari galeri..."
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -105,6 +188,8 @@ function deleteGaleri(id) {
                                 <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider w-12">No.</th>
                                 <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Foto</th>
                                 <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Undangan</th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Type</th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Category</th>
                                 <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider w-24">Actions</th>
                             </tr>
                         </thead>
@@ -116,6 +201,18 @@ function deleteGaleri(id) {
                                 </td>
                                 <td class="px-4 py-2 whitespace-nowrap text-sm">
                                     {{ item.undangan ? `${item.undangan.nama_mempelai_1} & ${item.undangan.nama_mempelai_2}` : '-' }}
+                                </td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm">
+                                    <span v-if="item.type" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100">
+                                        {{ getTypeLabel(item.type) }}
+                                    </span>
+                                    <span v-else>-</span>
+                                </td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm">
+                                    <span v-if="item.category" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100">
+                                        {{ getCategoryLabel(item.category) }}
+                                    </span>
+                                    <span v-else>-</span>
                                 </td>
                                 <td class="px-4 py-2 whitespace-nowrap">
                                     <div class="flex space-x-1">
@@ -138,7 +235,7 @@ function deleteGaleri(id) {
                                 </td>
                             </tr>
                             <tr v-if="galeris.data.length === 0">
-                                <td colspan="4" class="px-4 py-3 text-center text-gray-500 dark:text-gray-400">
+                                <td colspan="6" class="px-4 py-3 text-center text-gray-500 dark:text-gray-400">
                                     Tidak ada foto galeri
                                 </td>
                             </tr>

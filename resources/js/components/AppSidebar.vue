@@ -24,21 +24,27 @@ const mainNavItems: NavItem[] = [
         href: '/tamus',
         icon: Folder,
     },
+    // {
+    //     title: 'Galeri',
+    //     icon: Image,
+    //     children: [
+    //         {
+    //             title: 'Semua Galeri',
+    //             href: '/galeris',
+    //             icon: List,
+    //         },
+    //         {
+    //             title: 'Tambah Galeri',
+    //             href: '/galeris/create',
+    //             icon: Plus,
+    //         }
+    //     ]
+    // },
     {
         title: 'Galeri',
         icon: Image,
-        children: [
-            {
-                title: 'Semua Galeri',
-                href: '/galeris',
-                icon: List,
-            },
-            {
-                title: 'Tambah Galeri',
-                href: '/galeris/create',
-                icon: Plus,
-            }
-        ]
+        href: '/galeris',
+
     },
     {
         title: 'Lihat Hasil',

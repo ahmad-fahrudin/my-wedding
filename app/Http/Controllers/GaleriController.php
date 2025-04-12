@@ -6,6 +6,8 @@ use Exception;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Services\GaleriService;
+use App\Enums\GaleriTypeEnum;
+use App\Enums\GaleriCategoryEnum;
 use App\Services\UndanganService;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\GaleriRequest;
@@ -24,12 +26,30 @@ class GaleriController extends Controller
     public function index(Request $request)
     {
         try {
-            $filters = $request->only(['undangan_id']);
+            // Accept all filter parameters from the frontend
+            $filters = $request->only(['search', 'type', 'category', 'undangan_id']);
             $galeris = $this->galeriService->getAllPaginated($filters);
+
+            // Get enum values for dropdowns
+            $types = collect(GaleriTypeEnum::cases())->map(function ($type) {
+                return [
+                    'value' => $type->value,
+                    'label' => $type->label()
+                ];
+            });
+
+            $categories = collect(GaleriCategoryEnum::cases())->map(function ($category) {
+                return [
+                    'value' => $category->value,
+                    'label' => $category->label()
+                ];
+            });
 
             return Inertia::render('Galeri/Index', [
                 'galeris' => $galeris,
                 'filters' => $filters,
+                'types' => $types,
+                'categories' => $categories
             ]);
         } catch (Exception $e) {
             Log::error('Error fetching galeri data: ' . $e->getMessage());
@@ -42,8 +62,25 @@ class GaleriController extends Controller
         try {
             $undangans = $this->undanganService->getAllUndangan([]);
 
+            // Get enum values for dropdowns
+            $types = collect(GaleriTypeEnum::cases())->map(function ($type) {
+                return [
+                    'value' => $type->value,
+                    'label' => $type->label()
+                ];
+            });
+
+            $categories = collect(GaleriCategoryEnum::cases())->map(function ($category) {
+                return [
+                    'value' => $category->value,
+                    'label' => $category->label()
+                ];
+            });
+
             return Inertia::render('Galeri/Create', [
-                'undangans' => $undangans
+                'undangans' => $undangans,
+                'types' => $types,
+                'categories' => $categories
             ]);
         } catch (Exception $e) {
             Log::error('Error loading galeri create form: ' . $e->getMessage());
@@ -70,9 +107,26 @@ class GaleriController extends Controller
             $galeri = $this->galeriService->getById($id);
             $undangans = $this->undanganService->getAllUndangan([]);
 
+            // Get enum values for dropdowns
+            $types = collect(GaleriTypeEnum::cases())->map(function ($type) {
+                return [
+                    'value' => $type->value,
+                    'label' => $type->label()
+                ];
+            });
+
+            $categories = collect(GaleriCategoryEnum::cases())->map(function ($category) {
+                return [
+                    'value' => $category->value,
+                    'label' => $category->label()
+                ];
+            });
+
             return Inertia::render('Galeri/Edit', [
                 'galeri' => $galeri,
-                'undangans' => $undangans
+                'undangans' => $undangans,
+                'types' => $types,
+                'categories' => $categories
             ]);
         } catch (Exception $e) {
             Log::error('Error loading galeri edit form: ' . $e->getMessage());

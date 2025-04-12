@@ -2,6 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\GaleriTypeEnum;
+use App\Enums\GaleriCategoryEnum;
+use Illuminate\Validation\Rules\Enum;
 use Illuminate\Foundation\Http\FormRequest;
 
 class GaleriRequest extends FormRequest
@@ -22,7 +25,9 @@ class GaleriRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'undangan_id' => ['required', 'integer', 'exists:undangans,id'],
+            'undangan_id' => 'required|exists:undangans,id',
+            'type' => ['nullable', new Enum(GaleriTypeEnum::class)],
+            'category' => ['nullable', new Enum(GaleriCategoryEnum::class)],
         ];
 
         if ($this->isMethod('post')) {

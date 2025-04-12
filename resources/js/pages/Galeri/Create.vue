@@ -10,7 +10,9 @@ import Swal from 'sweetalert2';
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 
 const props = defineProps({
-  undangans: Object
+  undangans: Object,
+  types: Array,
+  categories: Array
 });
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -26,6 +28,8 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 const form = useForm({
   undangan_id: '',
+  type: '',
+  category: '',
   image: null,
 });
 
@@ -203,6 +207,38 @@ function submit() {
                                 <input type="hidden" v-model="form.undangan_id" />
                                 <p v-if="form.errors.undangan_id" class="mt-1 text-sm text-red-500">{{ form.errors.undangan_id }}</p>
                             </div>
+                        </div>
+
+                        <!-- Type Selection -->
+                        <div class="space-y-2">
+                            <Label for="type">Type</Label>
+                            <select
+                                id="type"
+                                v-model="form.type"
+                                class="w-full pl-4 pr-2 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-900 text-sm"
+                            >
+                                <option value="">Pilih Type</option>
+                                <option v-for="typeOption in types" :key="typeOption.value" :value="typeOption.value">
+                                    {{ typeOption.label }}
+                                </option>
+                            </select>
+                            <p v-if="form.errors.type" class="mt-1 text-sm text-red-500">{{ form.errors.type }}</p>
+                        </div>
+
+                        <!-- Category Selection -->
+                        <div class="space-y-2">
+                            <Label for="category">Category</Label>
+                            <select
+                                id="category"
+                                v-model="form.category"
+                                class="w-full pl-4 pr-2 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-900 text-sm"
+                            >
+                                <option value="">Pilih Category</option>
+                                <option v-for="categoryOption in categories" :key="categoryOption.value" :value="categoryOption.value">
+                                    {{ categoryOption.label }}
+                                </option>
+                            </select>
+                            <p v-if="form.errors.category" class="mt-1 text-sm text-red-500">{{ form.errors.category }}</p>
                         </div>
 
                         <div class="space-y-2">
