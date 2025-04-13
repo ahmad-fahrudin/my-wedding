@@ -40,6 +40,7 @@ class UndanganRequest extends FormRequest
             'tgl_story_1' => 'nullable|date',
             'tgl_story_2' => 'nullable|date',
             'tgl_story_3' => 'nullable|date',
+            'music' => 'nullable|file|mimes:mp3,wav,ogg|max:10240',
         ];
     }
 }

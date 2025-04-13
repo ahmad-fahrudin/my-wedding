@@ -19,6 +19,7 @@ class UndanganContent extends Model
         'tgl_story_1',
         'tgl_story_2',
         'tgl_story_3',
+        'music'
     ];
 
     public function undangan()

@@ -600,45 +600,44 @@
         </div>
     </section>
 
+    <!-- Music Player -->
+    <div class="music-player">
+        <!-- Hidden audio element that will play the music -->
+        <audio id="background-music" loop>
+            @if(isset($undangan) && $undangan->content && $undangan->content->music)
+            @php
+            $musicSource = $undangan->content->music;
+            // Check if the music is a Base64 string
+            $isBase64 = strpos($musicSource, 'data:audio') === 0;
+            @endphp
 
+            @if($isBase64)
+            <!-- Base64 encoded audio -->
+            <source src="{{ $musicSource }}" type="audio/mpeg">
+            @else
+            <!-- Regular file path -->
+            <source src="{{ asset($musicSource) }}" type="audio/mpeg">
+            @endif
+            @else
+            <!-- Default audio file -->
+            <source src="{{ asset('lovelove/audio/wedding-song.mp3') }}" type="audio/mpeg">
+            @endif
+            Your browser does not support the audio element.
+        </audio>
 
-
-    <!-- wpo-site-footer start -->
-    <div class="wpo-site-footer text-center">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="footer-image">
-                        <a class="logo" href="index.html"><img src="{{ asset('lovelove/images/logo.svg') }}" alt=""></a>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="link-widget">
-                        <ul>
-                            <li><a href="#"><i class="ti-twitter"></i></a></li>
-                            <li><a href="#"><i class="ti-dribbble"></i></a></li>
-                            <li><a href="#"><i class="ti-facebook"></i></a></li>
-                            <li><a href="#"><i class="ti-linkedin"></i></a></li>
-                            <li><a href="#"><i class="ti-skype"></i></a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="copyright">
-                        <p>© Hak Cipta 2022 | <a href="index.html">LoveLove</a> | Semua hak dilindungi.</p>
-                    </div>
-                </div>
-            </div>
+        <!-- Music control button -->
+        <div class="music-control-btn">
+            <button type="button" id="music-toggle" class="music-btn">
+                <i class="fa fa-music"></i>
+            </button>
         </div>
     </div>
-    <!-- wpo-site-footer end -->
 
-    <!-- color-switcher -->
     <div class="color-switcher-wrap">
         <div class="color-switcher-item">
-            <div class="color-toggle-btn">
+            {{-- <div class="color-toggle-btn">
                 <i class="fa fa-cog"></i>
-            </div>
+            </div> --}}
             <ul id="switcher">
                 <li class="btn btn1" id="Button1"></li>
                 <li class="btn btn2" id="Button2"></li>
@@ -670,9 +669,115 @@
     <!-- Custom script for this template -->
     <script src="{{ asset('lovelove/js/script.js') }}"></script>
     <script>
-        // Additional custom JavaScript can be added here
+        // Wait until DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            const musicBtn = document.getElementById('music-toggle');
+            const music = document.getElementById('background-music');
+
+            // Set initial state - we want it to start playing
+            let isPlaying = true;
+
+            // Try to play music immediately (will be blocked by most browsers)
+            music.play().catch(e => {
+                console.log('Auto-play prevented by browser, user interaction needed');
+                isPlaying = false;
+                musicBtn.classList.add('paused');
+            });
+
+            // Function to toggle music
+            function toggleMusic() {
+                if (isPlaying) {
+                    music.pause();
+                    musicBtn.classList.add('paused');
+                } else {
+                    music.play().catch(e => {
+                        console.log('Play prevented by browser');
+                    });
+                    musicBtn.classList.remove('paused');
+                }
+                isPlaying = !isPlaying;
+            }
+
+            // Add click event listener to the button
+            if (musicBtn) {
+                musicBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleMusic();
+                });
+            }
+
+            // Auto-play music when user first interacts with the page
+            const autoPlayMusic = function() {
+                if (!isPlaying) {
+                    music.play().then(() => {
+                        isPlaying = true;
+                        musicBtn.classList.remove('paused');
+                    }).catch(e => {
+                        console.log('Play prevented by browser');
+                    });
+                }
+
+                // Remove event listeners after first interaction
+                document.removeEventListener('click', autoPlayMusic);
+                document.removeEventListener('touchstart', autoPlayMusic);
+                document.removeEventListener('scroll', autoPlayMusic);
+            };
+
+            // Add event listeners for any user interaction
+            document.addEventListener('click', autoPlayMusic);
+            document.addEventListener('touchstart', autoPlayMusic);
+            document.addEventListener('scroll', autoPlayMusic);
+        });
 
     </script>
+
+    <style>
+        .music-player {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            z-index: 999;
+        }
+
+        .music-control-btn .music-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #c9a74d;
+            border: none;
+            box-shadow: 0 4px 15px rgba(201, 167, 77, 0.3);
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 2s infinite;
+            position: relative;
+            z-index: 1000;
+        }
+
+        .music-control-btn .music-btn.paused {
+            background: #777;
+            animation: none;
+        }
+
+        .music-control-btn .music-btn.paused i {
+            opacity: 0.7;
+        }
+
+        /* Make sure the button is clickable */
+        .music-control-btn {
+            position: relative;
+            z-index: 1000;
+            pointer-events: auto;
+        }
+
+    </style>
+
 </body>
 
 </html>

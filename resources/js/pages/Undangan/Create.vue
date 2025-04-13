@@ -4,10 +4,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { type BreadcrumbItem } from '@/types';
 import { Head, useForm, Link } from '@inertiajs/vue3';
 import Swal from 'sweetalert2';
-import { CalendarIcon, MapPinIcon, ClockIcon, UsersIcon, CreditCardIcon, BookOpenIcon, HeartIcon } from 'lucide-vue-next';
+import { CalendarIcon, MapPinIcon, ClockIcon, UsersIcon, CreditCardIcon, BookOpenIcon, HeartIcon, MusicIcon } from 'lucide-vue-next';
 import { ref, onMounted } from 'vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -40,7 +39,39 @@ const form = useForm({
   tgl_story_1: '',
   tgl_story_2: '',
   tgl_story_3: '',
+  music: null as File | null,
 });
+
+// Music file related variables
+const musicFileName = ref('');
+const audioPlayer = ref<HTMLAudioElement | null>(null);
+const audioPreviewUrl = ref('');
+
+// Function to handle music file selection
+function handleMusicUpload(event: Event) {
+  const input = event.target as HTMLInputElement;
+  if (input.files && input.files[0]) {
+    const file = input.files[0];
+    form.music = file;
+    musicFileName.value = file.name;
+
+    // Create audio preview URL
+    if (audioPreviewUrl.value) {
+      URL.revokeObjectURL(audioPreviewUrl.value);
+    }
+    audioPreviewUrl.value = URL.createObjectURL(file);
+  }
+}
+
+// Function to reset music selection
+function resetMusicSelection() {
+  form.music = null;
+  musicFileName.value = '';
+  if (audioPreviewUrl.value) {
+    URL.revokeObjectURL(audioPreviewUrl.value);
+    audioPreviewUrl.value = '';
+  }
+}
 
 // Map related variables
 const mapSearch = ref('');
@@ -49,6 +80,7 @@ let marker: any;
 
 function submit() {
   form.post(route('undangans.store'), {
+    forceFormData: true,
     onSuccess: () => {
       Swal.fire({
         toast: true,
@@ -74,7 +106,6 @@ function submit() {
   });
 }
 
-// Initialize OpenStreetMap
 // Initialize OpenStreetMap
 onMounted(() => {
   // Load Leaflet CSS
@@ -484,6 +515,61 @@ function updateLocationUrl(lat: number, lng: number) {
                     />
                   <p v-if="form.errors.rekening" class="text-sm text-red-500">{{ form.errors.rekening }}</p>
                   <p class="text-xs text-gray-500">Contoh: Bank BCA - 1234567890 - Atas Nama: Budi Santoso</p>
+                </div>
+              </div>
+
+              <!-- Music Upload Section -->
+              <div class="space-y-4 md:col-span-2">
+                <h3 class="text-md font-medium flex items-center gap-2">
+                  <MusicIcon class="h-4 w-4" />
+                  Musik Latar
+                </h3>
+
+                <div class="space-y-2">
+                  <Label for="music" class="font-medium">Pilih File Musik (MP3, WAV, OGG)</Label>
+                  <div class="flex items-center gap-2">
+                    <input
+                      id="music"
+                      type="file"
+                      class="hidden"
+                      accept=".mp3,.wav,.ogg"
+                      @change="handleMusicUpload"
+                      ref="musicInput"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      @click="$refs.musicInput.click()"
+                    >
+                      Pilih File
+                    </Button>
+                    <span v-if="musicFileName" class="text-sm">
+                      {{ musicFileName }}
+                    </span>
+                    <Button
+                      v-if="musicFileName"
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      @click="resetMusicSelection"
+                      class="text-red-500"
+                    >
+                      Hapus
+                    </Button>
+                  </div>
+
+                  <!-- Audio Preview -->
+                  <div v-if="audioPreviewUrl" class="mt-2">
+                    <audio
+                      ref="audioPlayer"
+                      controls
+                      class="w-full"
+                      :src="audioPreviewUrl"
+                    ></audio>
+                  </div>
+
+                  <p v-if="form.errors.music" class="text-sm text-red-500">{{ form.errors.music }}</p>
+                  <p class="text-xs text-gray-500">Upload file musik untuk diputar pada halaman undangan (maksimal 10MB)</p>
                 </div>
               </div>
             </div>

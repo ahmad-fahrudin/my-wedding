@@ -22,6 +22,7 @@ return new class extends Migration
             $table->date('tgl_story_2')->nullable();
             $table->text('story_3')->nullable();
             $table->date('tgl_story_3')->nullable();
+            $table->longText('music')->nullable();
             $table->timestamps();
         });
     }

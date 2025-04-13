@@ -7,7 +7,7 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { type BreadcrumbItem } from '@/types';
 import { Head, useForm, Link } from '@inertiajs/vue3';
 import Swal from 'sweetalert2';
-import { CalendarIcon, MapPinIcon, ClockIcon, UsersIcon, CreditCardIcon, BookOpenIcon, HeartIcon } from 'lucide-vue-next';
+import { CalendarIcon, MapPinIcon, ClockIcon, UsersIcon, CreditCardIcon, BookOpenIcon, HeartIcon, MusicIcon } from 'lucide-vue-next';
 import { ref, onMounted } from 'vue';
 
 const props = defineProps({
@@ -16,10 +16,6 @@ const props = defineProps({
     required: true
   },
 });
-
-// Debug undangan data to see the structure
-console.log('Data yang diterima:', props.undangan);
-console.log('Content data:', props.undangan.content);
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -34,13 +30,13 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 const form = useForm({
   // Undangan fields
-  nama_mempelai_1: props.undangan.nama_mempelai_1,
-  nama_mempelai_2: props.undangan.nama_mempelai_2,
-  tanggal_acara: props.undangan.tanggal_acara,
-  waktu_acara: props.undangan.waktu_acara,
-  tempat: props.undangan.tempat,
-  url_maps: props.undangan.url_maps,
-  rekening: props.undangan.rekening,
+  nama_mempelai_1: props.undangan?.nama_mempelai_1 || '',
+  nama_mempelai_2: props.undangan?.nama_mempelai_2 || '',
+  tanggal_acara: props.undangan?.tanggal_acara || '',
+  waktu_acara: props.undangan?.waktu_acara || '',
+  tempat: props.undangan?.tempat || '',
+  url_maps: props.undangan?.url_maps || '',
+  rekening: props.undangan?.rekening || '',
 
   // UndanganContent fields - use optional chaining in case these fields don't exist yet
   description_mempelai_1: props.undangan.content?.description_mempelai_1 || '',
@@ -51,42 +47,26 @@ const form = useForm({
   tgl_story_1: props.undangan.content?.tgl_story_1 || '',
   tgl_story_2: props.undangan.content?.tgl_story_2 || '',
   tgl_story_3: props.undangan.content?.tgl_story_3 || '',
+
+  // Music field
+  music: null as File | null,
+  keep_existing_music: true,
 });
 
-// Map related variables
+// Music file related variables
+const musicFileName = ref(props.undangan.content?.music_filename || '');
+const audioPlayer = ref<HTMLAudioElement | null>(null);
+const audioPreviewUrl = ref('');
 const mapSearch = ref('');
-let map: any;
-let marker: any;
 
-function submit() {
-  form.put(route('undangans.update', props.undangan.id), {
-    onSuccess: () => {
-      Swal.fire({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        icon: 'success',
-        title: 'Undangan berhasil diperbarui'
-      })
-    },
-    onError: () => {
-      Swal.fire({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        icon: 'error',
-        title: 'Gagal memperbarui undangan'
-      });
-    },
-  });
-}
-
-// Initialize OpenStreetMap
 onMounted(() => {
+  if (props.undangan.content?.music) {
+    audioPreviewUrl.value = props.undangan.content.music;
+    if (props.undangan.content.music_filename) {
+      musicFileName.value = props.undangan.content.music_filename;
+    }
+  }
+
   // Load Leaflet CSS
   if (!document.getElementById('leaflet-css')) {
     const link = document.createElement('link');
@@ -110,6 +90,77 @@ onMounted(() => {
     initMap();
   }
 });
+
+// Function to handle music file selection
+function handleMusicUpload(event: Event) {
+  const input = event.target as HTMLInputElement;
+  if (input.files && input.files[0]) {
+    const file = input.files[0];
+    form.music = file;
+    form.keep_existing_music = false; // We're uploading a new file
+    musicFileName.value = file.name;
+
+    // Create audio preview URL
+    if (audioPreviewUrl.value && !audioPreviewUrl.value.startsWith('data:') && !audioPreviewUrl.value.startsWith('http')) {
+      URL.revokeObjectURL(audioPreviewUrl.value);
+    }
+    audioPreviewUrl.value = URL.createObjectURL(file);
+  }
+}
+
+// Function to reset music selection
+function resetMusicSelection() {
+  form.music = null;
+  form.keep_existing_music = false; // Don't keep existing music either
+  musicFileName.value = '';
+  if (audioPreviewUrl.value && !audioPreviewUrl.value.startsWith('data:') && !audioPreviewUrl.value.startsWith('http')) {
+    URL.revokeObjectURL(audioPreviewUrl.value);
+  }
+  audioPreviewUrl.value = '';
+}
+
+let map: any;
+let marker: any;
+
+function submit() {
+  // Add this line to process file uploads correctly
+  form.transform((data) => {
+    // If we have a new music file, properly flag it
+    if (data.music) {
+      data.has_new_music = true;
+    }
+
+    return data;
+  });
+
+  form.put(route('undangans.update', props.undangan.id), {
+    // Add this option to ensure proper file upload
+    forceFormData: true,
+    onSuccess: () => {
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        icon: 'success',
+        title: 'Undangan berhasil diperbarui'
+      })
+    },
+    onError: (errors) => {
+      console.log('Form errors:', errors);
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        icon: 'error',
+        title: 'Gagal memperbarui undangan'
+      });
+    },
+  });
+}
 
 function initMap() {
   // Use existing map coordinates if available
@@ -509,15 +560,73 @@ function updateLocationUrl(lat: number, lng: number) {
                   <p class="text-xs text-gray-500">Contoh: Bank BCA - 1234567890 - Atas Nama: Budi Santoso</p>
                 </div>
               </div>
+
+              <!-- Music Upload Section -->
+              <div class="space-y-4 md:col-span-2">
+                <h3 class="text-md font-medium flex items-center gap-2">
+                  <MusicIcon class="h-4 w-4" />
+                  Musik Latar
+                </h3>
+
+                <div class="space-y-2">
+                  <Label for="music" class="font-medium">Pilih File Musik (MP3, WAV, OGG)</Label>
+                  <div class="flex items-center gap-2">
+                    <input
+                      id="music"
+                      type="file"
+                      class="hidden"
+                      accept=".mp3,.wav,.ogg"
+                      @change="handleMusicUpload"
+                      ref="musicInput"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      @click="$refs.musicInput.click()"
+                    >
+                      Pilih File
+                    </Button>
+                    <span v-if="musicFileName" class="text-sm">
+                      {{ musicFileName }}
+                    </span>
+                    <Button
+                      v-if="musicFileName"
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      @click="resetMusicSelection"
+                      class="text-red-500"
+                    >
+                      Hapus
+                    </Button>
+                  </div>
+
+                  <!-- Audio Preview -->
+                  <div v-if="audioPreviewUrl" class="mt-2">
+                    <audio
+                      ref="audioPlayer"
+                      controls
+                      class="w-full"
+                      :src="audioPreviewUrl"
+                    ></audio>
+                    <p v-if="!form.music && props.undangan.content?.music" class="text-xs text-gray-500 mt-1">
+                      Menggunakan musik yang sudah ada. Hapus atau pilih file baru untuk mengubahnya.
+                    </p>
+                  </div>
+
+                  <p v-if="form.errors.music" class="text-sm text-red-500">{{ form.errors.music }}</p>
+                  <p class="text-xs text-gray-500">Upload file musik untuk diputar pada halaman undangan (maksimal 10MB)</p>
+                </div>
+              </div>
             </div>
           </CardContent>
 
-        <CardFooter class="flex justify-between">
-            <Link :href="route('undangans.index')">
-                <Button type="button" variant="outline">Batal</Button>
-            </Link>
-            <Button type="submit" :disabled="form.processing">Simpan Perubahan</Button>
-        </CardFooter>
+          <CardFooter class="flex justify-between">
+              <Link :href="route('undangans.index')">
+                  <Button type="button" variant="outline">Batal</Button>
+              </Link>
+              <Button type="submit" :disabled="form.processing">Simpan Perubahan</Button>
+          </CardFooter>
         </form>
       </Card>
     </div>

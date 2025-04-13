@@ -3,8 +3,6 @@
 namespace App\Services;
 
 use App\Models\Undangan;
-use App\Models\UndanganContent;
-use App\Models\Ucapan;
 use App\Repositories\UndanganRepository;
 use App\Repositories\UcapanRepository;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -63,6 +61,19 @@ class UndanganService
 
             // Update or create content data
             if (!empty($contentData)) {
+                // Handle the music file situation
+                $keepExistingMusic = isset($contentData['keep_existing_music']) && $contentData['keep_existing_music'];
+
+                if ($keepExistingMusic) {
+                    // If keeping existing music, remove this flag from data to be saved
+                    unset($contentData['keep_existing_music']);
+
+                    // And remove music field to prevent overwriting
+                    if (isset($contentData['music'])) {
+                        unset($contentData['music']);
+                    }
+                }
+
                 $undangan->content()->updateOrCreate(
                     ['undangan_id' => $undangan->id],
                     $contentData
@@ -70,7 +81,7 @@ class UndanganService
             }
 
             DB::commit();
-            return $undangan;
+            return true;
         } catch (Exception $e) {
             DB::rollBack();
             Log::error('Error updating undangan with content: ' . $e->getMessage());

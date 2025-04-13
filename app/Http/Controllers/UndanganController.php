@@ -73,6 +73,11 @@ class UndanganController extends Controller
                 'tgl_story_3' => $validated['tgl_story_3'] ?? null,
             ]);
 
+            // Handle music file separately
+            if ($request->hasFile('music') && $request->file('music')->isValid()) {
+                $contentData['music'] = $request->file('music');
+            }
+
             $this->undanganService->createUndanganWithContent($undanganData, $contentData);
 
             return redirect()->route('undangans.index')->with('success', 'Undangan created successfully');
@@ -122,6 +127,17 @@ class UndanganController extends Controller
                 'tgl_story_2' => $validated['tgl_story_2'] ?? null,
                 'tgl_story_3' => $validated['tgl_story_3'] ?? null,
             ]);
+
+            // Handle music file separately
+            if ($request->hasFile('music') && $request->file('music')->isValid()) {
+                $contentData['music'] = $request->file('music');
+            } else if ($validated['keep_existing_music'] ?? false) {
+                // Keep existing music (don't update music field)
+                $contentData['keep_existing_music'] = true;
+            } else {
+                // Clear music if neither new file nor keep existing is specified
+                $contentData['music'] = null;
+            }
 
             $this->undanganService->updateUndanganWithContent($id, $undanganData, $contentData);
 
