@@ -51,9 +51,11 @@ Route::get('/ucapan', [UndanganController::class, 'adminUcapan'])->name('admin.u
 Route::delete('/ucapan/{id}', [UndanganController::class, 'deleteUcapan'])->name('admin.ucapan.destroy');
 
 // Integrasi WAblast
+Route::get('/setup', [WaBlastController::class, 'setupDevice'])->name('blast.setup');
+Route::get('/connect-and-generate', [WaBlastController::class, 'connectAndGenerateQR'])->name('blast.connect.generate');
+
 Route::prefix('wablast')->group(function () {
-    Route::get('/connect-and-generate', [WaBlastController::class, 'connectAndGenerateQR'])->name('blast.connect.generate');
-    Route::get('/setup', [WaBlastController::class, 'setupDevice'])->name('blast.setup');
+    //
 });
 
 require __DIR__ . '/settings.php';

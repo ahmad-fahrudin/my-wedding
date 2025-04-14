@@ -63,7 +63,7 @@ const mainNavSections: NavSection[] = [
                 children: [
                     {
                         title: 'Daftar Device',
-                        href: '/integrasi',
+                        href: '/setup',
                         icon: ScanQrCode,
                     },
                     {

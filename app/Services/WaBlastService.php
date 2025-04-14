@@ -164,7 +164,80 @@ class WaBlastService
             ];
         }
 
+        $user = auth()->user();
+        if ($user) {
+            $user->device_id = $deviceId;
+            $user->save();
+        }
+
         // Step 3: Get QR code
         return $this->getQrCode($deviceId, $token);
+    }
+
+    public function getDevices(): array
+    {
+        try {
+            // Step 1: Generate token first
+            $tokenResult = $this->generateToken();
+            if (!isset($tokenResult['success']) || $tokenResult['success'] !== true) {
+                return [
+                    'success' => false,
+                    'message' => $tokenResult['message'] ?? 'Failed to generate token'
+                ];
+            }
+
+            $token = $tokenResult['token'] ?? null;
+            if (!$token) {
+                return [
+                    'success' => false,
+                    'message' => 'No token received from authentication service'
+                ];
+            }
+
+            // Step 2: Get devices
+            $response = $this->client->get($this->apiBaseUrl . '/devices', [
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer ' . $token
+                ]
+            ]);
+
+            $body = $response->getBody()->getContents();
+            $result = json_decode($body, true);
+
+            // Check for successful connected device and update user if needed
+            if (
+                isset($result['success']) && $result['success'] === true &&
+                isset($result['devices']) && is_array($result['devices'])
+            ) {
+
+                // If user is authenticated, check for their device in the list
+                if (auth()->check()) {
+                    $user = auth()->user();
+                    $deviceId = $user->device_id;
+
+                    // If user has a device ID set, find it in the list
+                    if ($deviceId) {
+                        foreach ($result['devices'] as $device) {
+                            if ($device['deviceId'] === $deviceId && $device['status'] === 'connected') {
+                                // Device is connected, ensure user record is updated
+                                $user->device_id = $deviceId;
+                                $user->save();
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return $result;
+        } catch (GuzzleException $e) {
+            Log::error('Error getting devices: ' . $e->getMessage());
+            return [
+                'success' => false,
+                'message' => 'Failed to get devices: ' . $e->getMessage()
+            ];
+        }
     }
 }

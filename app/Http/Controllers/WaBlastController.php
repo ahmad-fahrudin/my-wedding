@@ -36,4 +36,19 @@ class WaBlastController extends Controller
             return response()->json(['message' => 'Error connecting and generating QR: ' . $e->getMessage()], 500);
         }
     }
+
+    public function getDevices()
+    {
+        try {
+            $response = $this->waBlastService->getDevices();
+
+            return response()->json($response);
+        } catch (Exception $e) {
+            Log::error('Error fetching devices: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error fetching devices: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }
