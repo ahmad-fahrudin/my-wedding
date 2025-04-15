@@ -22,32 +22,72 @@ class WaBlastController extends Controller
         return Inertia::render('WaBlast/Setup');
     }
 
-    public function connectAndGenerateQR(Request $request)
+    public function connectDevice(Request $request)
     {
         $request->validate([
             'deviceId' => 'required|string',
         ]);
         try {
-            $response = $this->waBlastService->processQrCodeGeneration($request->deviceId);
+            // Get token first
+            $tokenResult = $this->waBlastService->getAuthToken();
+            if (!$tokenResult['success']) {
+                return response()->json($tokenResult);
+            }
+
+            $response = $this->waBlastService->connectDevice(
+                $request->deviceId,
+                $tokenResult['token']
+            );
 
             return response()->json($response);
         } catch (Exception $e) {
-            Log::error('Error connecting and generating QR: ' . $e->getMessage());
-            return response()->json(['message' => 'Error connecting and generating QR: ' . $e->getMessage()], 500);
+            Log::error('Error connecting device: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error connecting device: ' . $e->getMessage()
+            ], 500);
         }
     }
 
-    public function getDevices()
+    public function generateQR(Request $request)
     {
+        $request->validate([
+            'deviceId' => 'required|string',
+        ]);
         try {
-            $response = $this->waBlastService->getDevices();
+            $response = $this->waBlastService->generateQrCodeOnly($request->deviceId);
 
             return response()->json($response);
         } catch (Exception $e) {
-            Log::error('Error fetching devices: ' . $e->getMessage());
+            Log::error('Error generating QR: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
-                'message' => 'Error fetching devices: ' . $e->getMessage()
+                'message' => 'Error generating QR: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function checkDeviceStatus(Request $request)
+    {
+        $request->validate([
+            'deviceId' => 'required|string',
+        ]);
+
+        try {
+            // Get token first
+            $tokenResult = $this->waBlastService->getAuthToken();
+            if (!$tokenResult['success']) {
+                return response()->json($tokenResult);
+            }
+
+            $response = $this->waBlastService->checkDevices($request->deviceId, $tokenResult['token']);
+
+            return response()->json($response);
+        } catch (Exception $e) {
+            Log::error('Error checking device status: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error checking device status: ' . $e->getMessage()
             ], 500);
         }
     }

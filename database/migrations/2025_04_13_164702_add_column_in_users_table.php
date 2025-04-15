@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('device_id')->nullable()->after('password');
+            $table->string('device')->nullable()->after('password');
+            $table->boolean('is_connect')->after('device')->default(false);
         });
     }
 
@@ -22,7 +23,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('device_id');
+            $table->dropColumn('device');
+            $table->dropColumn('is_connect');
         });
     }
 };

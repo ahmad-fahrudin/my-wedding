@@ -5,6 +5,7 @@ namespace App\Services;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Exception;
 
 class WaBlastService
@@ -16,7 +17,7 @@ class WaBlastService
     public function __construct()
     {
         $this->client = new Client();
-        $this->apiBaseUrl = 'http://157.245.206.34:10020/api/whatsapp';
+        $this->apiBaseUrl = 'http://localhost:10020/api/whatsapp';
         $this->secretKey = env('WABLAST_SECRET_KEY', 'your_secret_key');
     }
 
@@ -34,8 +35,6 @@ class WaBlastService
             ]);
 
             $body = $response->getBody()->getContents();
-
-
             $result = json_decode($body, true);
             return $result;
         } catch (GuzzleException $e) {
@@ -45,6 +44,33 @@ class WaBlastService
                 'message' => 'Failed to generate token: ' . $e->getMessage()
             ];
         }
+    }
+
+    public function getAuthToken(): array
+    {
+        $tokenResult = $this->generateToken();
+        if (!isset($tokenResult['success']) || $tokenResult['success'] !== true) {
+            return [
+                'success' => false,
+                'step' => 'generate_token',
+                'message' => $tokenResult['message'] ?? 'Failed to generate token',
+                'details' => $tokenResult
+            ];
+        }
+
+        $token = $tokenResult['token'] ?? null;
+        if (!$token) {
+            return [
+                'success' => false,
+                'step' => 'extract_token',
+                'message' => 'No token received from authentication service'
+            ];
+        }
+
+        return [
+            'success' => true,
+            'token' => $token
+        ];
     }
 
     public function connectDevice(string $deviceId, string $token): array
@@ -71,6 +97,22 @@ class WaBlastService
                     'message' => 'Invalid JSON response from server',
                     'raw_response' => $body
                 ];
+            }
+
+            // Update the user's device
+            if (isset($result['success']) && $result['success'] === true) {
+                if (Auth::check()) {
+                    $user = Auth::user();
+                    $user->device = $deviceId;
+                    $user->save();
+
+                    // Add information about the update to the result
+                    $result['device_updated'] = true;
+                } else {
+                    Log::warning('Could not update device: No authenticated user found');
+                    $result['device_updated'] = false;
+                    $result['device_update_message'] = 'No authenticated user found';
+                }
             }
 
             return $result;
@@ -131,70 +173,9 @@ class WaBlastService
         }
     }
 
-    public function processQrCodeGeneration(string $deviceId)
-    {
-        // Step 1: Generate token
-        $tokenResult = $this->generateToken();
-        if (!isset($tokenResult['success']) || $tokenResult['success'] !== true) {
-            return [
-                'success' => false,
-                'step' => 'generate_token',
-                'message' => $tokenResult['message'] ?? 'Failed to generate token',
-                'details' => $tokenResult
-            ];
-        }
-
-        $token = $tokenResult['token'] ?? null;
-        if (!$token) {
-            return [
-                'success' => false,
-                'step' => 'extract_token',
-                'message' => 'No token received from authentication service'
-            ];
-        }
-
-        // Step 2: Connect device
-        $connectResult = $this->connectDevice($deviceId, $token);
-        if (!isset($connectResult['success']) || $connectResult['success'] !== true) {
-            return [
-                'success' => false,
-                'step' => 'connect_device',
-                'message' => $connectResult['message'] ?? 'Failed to connect device',
-                'details' => $connectResult
-            ];
-        }
-
-        $user = auth()->user();
-        if ($user) {
-            $user->device_id = $deviceId;
-            $user->save();
-        }
-
-        // Step 3: Get QR code
-        return $this->getQrCode($deviceId, $token);
-    }
-
-    public function getDevices(): array
+    public function checkDeviceStatus(string $deviceId, string $token): array
     {
         try {
-            // Step 1: Generate token first
-            $tokenResult = $this->generateToken();
-            if (!isset($tokenResult['success']) || $tokenResult['success'] !== true) {
-                return [
-                    'success' => false,
-                    'message' => $tokenResult['message'] ?? 'Failed to generate token'
-                ];
-            }
-
-            $token = $tokenResult['token'] ?? null;
-            if (!$token) {
-                return [
-                    'success' => false,
-                    'message' => 'No token received from authentication service'
-                ];
-            }
-
-            // Step 2: Get devices
             $response = $this->client->get($this->apiBaseUrl . '/devices', [
                 'headers' => [
                     'Content-Type' => 'application/json',
@@ -203,40 +184,149 @@ class WaBlastService
                 ]
             ]);
 
-            $body = $response->getBody()->getContents();
-            $result = json_decode($body, true);
+            $result = json_decode($response->getBody()->getContents(), true);
 
-            // Check for successful connected device and update user if needed
             if (
                 isset($result['success']) && $result['success'] === true &&
                 isset($result['devices']) && is_array($result['devices'])
             ) {
 
-                // If user is authenticated, check for their device in the list
-                if (auth()->check()) {
-                    $user = auth()->user();
-                    $deviceId = $user->device_id;
+                $deviceExists = false;
+                $isConnected = false;
 
-                    // If user has a device ID set, find it in the list
-                    if ($deviceId) {
-                        foreach ($result['devices'] as $device) {
-                            if ($device['deviceId'] === $deviceId && $device['status'] === 'connected') {
-                                // Device is connected, ensure user record is updated
-                                $user->device_id = $deviceId;
-                                $user->save();
-                                break;
-                            }
-                        }
+                foreach ($result['devices'] as $device) {
+                    if ($device['deviceId'] === $deviceId) {
+                        $deviceExists = true;
+                        $isConnected = ($device['status'] === 'connected');
+                        break;
                     }
                 }
+
+                return [
+                    'success' => true,
+                    'exists' => $deviceExists,
+                    'isConnected' => $isConnected
+                ];
             }
 
-            return $result;
-        } catch (GuzzleException $e) {
-            Log::error('Error getting devices: ' . $e->getMessage());
             return [
                 'success' => false,
-                'message' => 'Failed to get devices: ' . $e->getMessage()
+                'message' => 'Could not determine device status'
+            ];
+        } catch (GuzzleException $e) {
+            Log::error('Error checking device status: ' . $e->getMessage());
+            return [
+                'success' => false,
+                'message' => 'Error checking device status: ' . $e->getMessage()
+            ];
+        }
+    }
+
+    public function generateQrCodeOnly(string $deviceId): array
+    {
+        // Get token
+        $tokenResult = $this->getAuthToken();
+        if (!$tokenResult['success']) {
+            return $tokenResult;
+        }
+
+        $token = $tokenResult['token'];
+
+        // Check device status first
+        $deviceStatus = $this->checkDeviceStatus($deviceId, $token);
+        if ($deviceStatus['success'] && $deviceStatus['isConnected']) {
+            return [
+                'success' => true,
+                'message' => 'Device sudah terhubung',
+                'isConnected' => true
+            ];
+        }
+
+        // Get QR code directly
+        $qrResult = $this->getQrCode($deviceId, $token);
+
+        // Handle specific error case
+        if (
+            !$qrResult['success'] &&
+            isset($qrResult['message']) &&
+            strpos($qrResult['message'], 'No QR Code available') !== false
+        ) {
+
+            // Check if device status changed
+            $deviceStatus = $this->checkDeviceStatus($deviceId, $token);
+            if ($deviceStatus['success'] && $deviceStatus['isConnected']) {
+                return [
+                    'success' => true,
+                    'message' => 'Device sudah terhubung',
+                    'isConnected' => true
+                ];
+            } else if (!$deviceStatus['exists']) {
+                return [
+                    'success' => false,
+                    'message' => 'Device belum terhubung. Silakan hubungkan terlebih dahulu.'
+                ];
+            }
+        }
+
+        return $qrResult;
+    }
+
+    public function checkDevices(string $deviceId, string $token): array
+    {
+        try {
+            $response = $this->client->get($this->apiBaseUrl . '/devices', [
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer ' . $token
+                ]
+            ]);
+
+            $result = json_decode($response->getBody()->getContents(), true);
+
+            if (
+                isset($result['success']) && $result['success'] === true &&
+                isset($result['devices']) && is_array($result['devices'])
+            ) {
+
+                $deviceFound = false;
+                $isConnected = false;
+                $devices = $result['devices'];
+                $targetDevice = null;
+
+                // Find the specific device in the list
+                foreach ($devices as $device) {
+                    if ($device['deviceId'] === $deviceId) {
+                        $deviceFound = true;
+                        $isConnected = ($device['status'] === 'connected');
+                        $targetDevice = $device;
+                        break;
+                    }
+                }
+
+                // Update the user's device
+                $user = Auth::user();
+                $user->is_connect = true;
+                $user->save();
+
+                return [
+                    'success' => true,
+                    'deviceFound' => $deviceFound,
+                    'isConnected' => $isConnected,
+                    'device' => $targetDevice,
+                    'allDevices' => $devices
+                ];
+            }
+
+            return [
+                'success' => false,
+                'message' => 'Could not get device information from server'
+            ];
+        } catch (GuzzleException $e) {
+            Log::error('Error checking devices: ' . $e->getMessage());
+            return [
+                'success' => false,
+                'message' => 'Error checking devices: ' . $e->getMessage()
             ];
         }
     }
