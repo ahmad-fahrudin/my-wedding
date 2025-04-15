@@ -68,7 +68,7 @@ const mainNavSections: NavSection[] = [
                     },
                     {
                         title: 'Kirim Pesan',
-                        href: '/integrasi/kirim-pesan',
+                        href: '/send-page',
                         icon: Send,
                     }
                 ]

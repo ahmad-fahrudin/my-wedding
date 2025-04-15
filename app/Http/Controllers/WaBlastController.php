@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\WaBlastService;
+use App\Services\TamuService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Exception;
@@ -11,10 +12,14 @@ use Illuminate\Support\Facades\Log;
 class WaBlastController extends Controller
 {
     protected $waBlastService;
+    protected $tamuService;
 
-    public function __construct(WaBlastService $waBlastService)
-    {
+    public function __construct(
+        WaBlastService $waBlastService,
+        TamuService $tamuService
+    ) {
         $this->waBlastService = $waBlastService;
+        $this->tamuService = $tamuService;
     }
 
     public function setupDevice()
@@ -89,6 +94,22 @@ class WaBlastController extends Controller
                 'success' => false,
                 'message' => 'Error checking device status: ' . $e->getMessage()
             ], 500);
+        }
+    }
+
+    public function sendPage(Request $request)
+    {
+        try {
+            $filters = $request->only(['search', 'undangan_id']);
+            $tamu = $this->tamuService->getAllTamu($filters);
+
+            return Inertia::render('WaBlast/SendPage', [
+                'tamu' => $tamu,
+                'filters' => $filters,
+            ]);
+        } catch (Exception $e) {
+            Log::error('Error fetching tamu data: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal mengambil data tamu');
         }
     }
 }

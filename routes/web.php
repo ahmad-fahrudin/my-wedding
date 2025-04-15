@@ -56,6 +56,7 @@ Route::get('/setup', [WaBlastController::class, 'setupDevice'])->name('blast.set
 Route::get('/connect-device', [WaBlastController::class, 'connectDevice'])->name('blast.connect.device');
 Route::get('/generate-qr', [WaBlastController::class, 'generateQR'])->name('blast.generate.qr');
 Route::get('/device-check', [WaBlastController::class, 'checkDeviceStatus'])->name('blast.device.check');
+Route::get('/send-page', [WaBlastController::class, 'sendPage'])->name('blast.send.page');
 
 // Route::prefix('wablast')->group(function () {
 //     //
