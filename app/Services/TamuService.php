@@ -25,7 +25,24 @@ class TamuService
         return $this->tamuRepository->getAllPaginated($filters);
     }
 
+    /**
+     * Get all tamu with filters, returning collection instead of paginated results
+     * This is specifically for bulk operations
+     *
+     * @param array $filters
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getAllWithFilter($filters = [])
+    {
+        return $this->tamuRepository->getAllWithFilters($filters);
+    }
+
     public function getTamu(int $id): Tamu
+    {
+        return $this->tamuRepository->findById($id);
+    }
+
+    public function getTamuById(int $id): Tamu
     {
         return $this->tamuRepository->findById($id);
     }

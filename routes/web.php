@@ -51,16 +51,15 @@ Route::get('/ucapan/{undangan_id}', [UndanganController::class, 'ucapan'])->name
 Route::get('/ucapan', [UndanganController::class, 'adminUcapan'])->name('admin.ucapan.index');
 Route::delete('/ucapan/{id}', [UndanganController::class, 'deleteUcapan'])->name('admin.ucapan.destroy');
 
-// Integrasi WAblast
+// Integrasi WAblast Routes
 Route::get('/setup', [WaBlastController::class, 'setupDevice'])->name('blast.setup');
 Route::get('/connect-device', [WaBlastController::class, 'connectDevice'])->name('blast.connect.device');
 Route::get('/generate-qr', [WaBlastController::class, 'generateQR'])->name('blast.generate.qr');
 Route::get('/device-check', [WaBlastController::class, 'checkDeviceStatus'])->name('blast.device.check');
 Route::get('/send-page', [WaBlastController::class, 'sendPage'])->name('blast.send.page');
-
-// Route::prefix('wablast')->group(function () {
-//     //
-// });
+Route::post('/message', [WaBlastController::class, 'storeMessage'])->name('blast.message.store');
+Route::post('/send-message', [WaBlastController::class, 'sendMessage'])->name('blast.send.message');
+Route::post('/send-bulk-message', [WaBlastController::class, 'sendBulkMessage'])->name('blast.send.bulk');
 
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';

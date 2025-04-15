@@ -330,4 +330,178 @@ class WaBlastService
             ];
         }
     }
+
+    public function sendMessage(string $deviceId, string $to, string $message): array
+    {
+        try {
+            // Get token first
+            $tokenResult = $this->getAuthToken();
+            if (!$tokenResult['success']) {
+                return $tokenResult;
+            }
+
+            $token = $tokenResult['token'];
+
+            // Format phone number if it doesn't end with @s.whatsapp.net
+            if (strpos($to, '@s.whatsapp.net') === false) {
+                $to = $to . '@s.whatsapp.net';
+            }
+
+            $response = $this->client->post($this->apiBaseUrl . '/send', [
+                'json' => [
+                    'deviceId' => $deviceId,
+                    'to' => $to,
+                    'message' => $message
+                ],
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer ' . $token
+                ],
+                'timeout' => 30
+            ]);
+
+            $body = $response->getBody()->getContents();
+            $result = json_decode($body, true);
+
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                Log::error("Failed to parse JSON response from send message: " . json_last_error_msg());
+                return [
+                    'success' => false,
+                    'message' => 'Invalid JSON response from server',
+                    'raw_response' => $body
+                ];
+            }
+
+            return $result;
+        } catch (GuzzleException $e) {
+            Log::error('Error sending message: ' . $e->getMessage());
+            return [
+                'success' => false,
+                'message' => 'Failed to send message: ' . $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Send bulk messages to multiple recipients
+     * 
+     * @param string $deviceId The device ID to use for sending
+     * @param array $recipients Array of recipient information (id, no_wa, nama_tamu)
+     * @param string $messageTemplate The message template with placeholders
+     * @return array Response with success status and details
+     */
+    public function sendBulkMessages(string $deviceId, array $recipients, string $messageTemplate): array
+    {
+        // Get token first
+        $tokenResult = $this->getAuthToken();
+        if (!$tokenResult['success']) {
+            return $tokenResult;
+        }
+
+        $token = $tokenResult['token'];
+
+        $results = [
+            'success' => true,
+            'total' => count($recipients),
+            'sent' => 0,
+            'failed' => 0,
+            'details' => []
+        ];
+
+        foreach ($recipients as $recipient) {
+            try {
+                // Skip if no WhatsApp number
+                if (empty($recipient['no_wa'])) {
+                    $results['failed']++;
+                    $results['details'][] = [
+                        'id' => $recipient['id'],
+                        'name' => $recipient['nama_tamu'],
+                        'success' => false,
+                        'message' => 'No WhatsApp number provided'
+                    ];
+                    continue;
+                }
+
+                // Process message template with replacements
+                $message = $messageTemplate;
+                $message = str_replace('{nama_tamu}', $recipient['nama_tamu'], $message);
+
+                // Format phone number if needed
+                $to = $recipient['no_wa'];
+                if (strpos($to, '@s.whatsapp.net') === false) {
+                    $to = $to . '@s.whatsapp.net';
+                }
+
+                // Send message
+                $response = $this->client->post($this->apiBaseUrl . '/send', [
+                    'json' => [
+                        'deviceId' => $deviceId,
+                        'to' => $to,
+                        'message' => $message
+                    ],
+                    'headers' => [
+                        'Content-Type' => 'application/json',
+                        'Accept' => 'application/json',
+                        'Authorization' => 'Bearer ' . $token
+                    ],
+                    'timeout' => 30
+                ]);
+
+                $body = $response->getBody()->getContents();
+                $responseData = json_decode($body, true);
+
+                if (isset($responseData['success']) && $responseData['success'] === true) {
+                    $results['sent']++;
+                    $results['details'][] = [
+                        'id' => $recipient['id'],
+                        'name' => $recipient['nama_tamu'],
+                        'success' => true
+                    ];
+                } else {
+                    $results['failed']++;
+                    $results['details'][] = [
+                        'id' => $recipient['id'],
+                        'name' => $recipient['nama_tamu'],
+                        'success' => false,
+                        'message' => $responseData['message'] ?? 'Unknown error'
+                    ];
+                }
+
+                // Add a small delay to avoid rate limiting (optional)
+                usleep(500000); // 500ms delay
+
+            } catch (GuzzleException $e) {
+                Log::error('Error sending bulk message to ' . $recipient['nama_tamu'] . ': ' . $e->getMessage());
+                $results['failed']++;
+                $results['details'][] = [
+                    'id' => $recipient['id'],
+                    'name' => $recipient['nama_tamu'],
+                    'success' => false,
+                    'message' => 'Error: ' . $e->getMessage()
+                ];
+            } catch (Exception $e) {
+                Log::error('General error sending bulk message: ' . $e->getMessage());
+                $results['failed']++;
+                $results['details'][] = [
+                    'id' => $recipient['id'],
+                    'name' => $recipient['nama_tamu'],
+                    'success' => false,
+                    'message' => 'Error: ' . $e->getMessage()
+                ];
+            }
+        }
+
+        // Update success status if any failures occurred
+        if ($results['failed'] > 0 && $results['sent'] == 0) {
+            $results['success'] = false;
+            $results['message'] = 'All messages failed to send';
+        } elseif ($results['failed'] > 0) {
+            $results['message'] = "Sent {$results['sent']} of {$results['total']} messages";
+        } else {
+            $results['message'] = "All {$results['sent']} messages sent successfully";
+        }
+
+        return $results;
+    }
 }

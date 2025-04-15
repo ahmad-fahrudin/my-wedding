@@ -21,6 +21,30 @@ class TamuRepository
             ->paginate($perPage);
     }
 
+    /**
+     * Get all tamu with filters without pagination (for bulk operations)
+     *
+     * @param array $filters
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getAllWithFilters(array $filters = [])
+    {
+        $query = Tamu::query()->with('undangan');
+
+        if (isset($filters['search']) && !empty($filters['search'])) {
+            $query->where(function ($q) use ($filters) {
+                $q->where('nama_tamu', 'LIKE', '%' . $filters['search'] . '%')
+                    ->orWhere('no_wa', 'LIKE', '%' . $filters['search'] . '%');
+            });
+        }
+
+        if (isset($filters['undangan_id']) && !empty($filters['undangan_id'])) {
+            $query->where('undangan_id', $filters['undangan_id']);
+        }
+
+        return $query->get();
+    }
+
     public function findById(int $id): Tamu
     {
         return Tamu::findOrFail($id);
