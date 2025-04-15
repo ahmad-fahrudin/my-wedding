@@ -76,6 +76,31 @@ class GaleriRepository
         return Galeri::with('undangan')->find($id);
     }
 
+    public function createBatch(array $data, array $images)
+    {
+        $createdItems = [];
+
+        foreach ($images as $image) {
+            if ($image instanceof UploadedFile) {
+                $imageContent = file_get_contents($image->getRealPath());
+                $imageBase64 = 'data:' . $image->getMimeType() . ';base64,' . base64_encode($imageContent);
+
+                $id = DB::table('galeris')->insertGetId([
+                    'undangan_id' => $data['undangan_id'],
+                    'type' => $data['type'] ?? null,
+                    'category' => $data['category'] ?? null,
+                    'image' => $imageBase64,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+
+                $createdItems[] = Galeri::find($id);
+            }
+        }
+
+        return $createdItems;
+    }
+
     public function update($id, array $data)
     {
         $galeri = Galeri::findOrFail($id);

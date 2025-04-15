@@ -40,6 +40,20 @@ class GaleriService
         }
     }
 
+    public function createBatch(array $data, array $images)
+    {
+        try {
+            DB::beginTransaction();
+            $galeris = $this->galeriRepository->createBatch($data, $images);
+            DB::commit();
+            return $galeris;
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('Error creating batch galeris: ' . $e->getMessage());
+            throw $e;
+        }
+    }
+
     public function update($id, array $data)
     {
         try {

@@ -43,6 +43,7 @@ Route::post('/galeris', [GaleriController::class, 'store'])->name('galeris.store
 Route::get('/galeris/{id}/edit', [GaleriController::class, 'edit'])->name('galeris.edit');
 Route::put('/galeris/{id}', [GaleriController::class, 'update'])->name('galeris.update');
 Route::delete('/galeris/{id}', [GaleriController::class, 'destroy'])->name('galeris.destroy');
+Route::post('/galeris/store-batch', [GaleriController::class, 'storeBatch'])->name('galeris.store-batch');
 
 // Content Routes
 Route::post('/ucapan', [UndanganController::class, 'storeUcapan'])->name('ucapan.store');

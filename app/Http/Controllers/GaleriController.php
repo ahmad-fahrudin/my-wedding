@@ -101,6 +101,34 @@ class GaleriController extends Controller
         }
     }
 
+    public function storeBatch(Request $request)
+    {
+        $request->validate([
+            'undangan_id' => 'required|exists:undangans,id',
+            'type' => 'required|string',
+            'category' => 'required|string',
+            'images' => 'required|array',
+            'images.*' => 'required|image|max:2048',
+        ]);
+
+        $data = $request->only(['undangan_id', 'type', 'category']);
+        $images = $request->file('images');
+
+        try {
+            $galeris = $this->galeriService->createBatch($data, $images);
+            return response()->json([
+                'success' => true,
+                'message' => 'Galeri berhasil ditambahkan',
+                'data' => $galeris
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menambahkan galeri: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function edit($id)
     {
         try {
